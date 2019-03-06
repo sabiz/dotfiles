@@ -8,13 +8,9 @@ else
 fi
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-fi
+[ -f /etc/bashrc ] && source /etc/bashrc
 
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+[ -f /etc/bash_completion ] && source /etc/bash_completion
 
 stty stop undef
 
@@ -51,7 +47,7 @@ alias less='less -R -N'
 
 # Complete------------------------------------------------
 
-source ~/.complete/git-completion.bash
+source ~/.util/git-completion.bash
 
 # Prompt--------------------------------------------------
 ARROW=$(echo -e "\xEE\x82\xB0")
@@ -72,9 +68,9 @@ PS1='\
 
 
 # Functions-----------------------------------------------
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export ENHANCD_FILTER=fzf
-source ~/.util/enhancd.sh
+# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# export ENHANCD_FILTER=fzf
+# source ~/.util/enhancd.sh
 
 extract () {
     if [ -f $1 ] ; then
