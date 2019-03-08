@@ -68,9 +68,9 @@ PS1='\
 
 
 # Functions-----------------------------------------------
-# [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-# export ENHANCD_FILTER=fzf
-# source ~/.util/enhancd.sh
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export ENHANCD_FILTER=fzf
+source ~/.util/enhancd/init.sh
 
 extract () {
     if [ -f $1 ] ; then

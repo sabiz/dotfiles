@@ -19,7 +19,10 @@ curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-
 mv git-prompt.sh ~/.util/.
 chmod a+x ~/.util/git-prompt.sh
 
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
 
+git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
 
 # link dotfiles -------------------------------
 if [ $OS = 'Mac' ];then
