@@ -1,0 +1,14 @@
+scriptencoding utf-8
+"""""""""""""""""""""""""""""""""""""
+" GUI Options
+"""""""""""""""""""""""""""""""""""""
+set guioptions=
+set guifont=RictyForPowerline_Nerd_Font:h13:cSHIFTJIS:qDRAFT
+set rop=type:directx,renmode:5
+set lazyredraw
+"""""""""""""""""""""""""""""""""""""
+" Load common config
+"""""""""""""""""""""""""""""""""""""
+if filereadable(expand('~/.vimrc'))
+  source ~/.vimrc
+endif

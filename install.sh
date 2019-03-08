@@ -31,3 +31,7 @@ if [ $OS = 'Mac' ];then
 else
     ln -s ~/dotfiles/.bashrc ~/.bashrc
 fi
+
+ln -s ~/dotfiles/.vimrc ~/.vimrc
+ln -s ~/dotfiles/.vim ~/.vim
+

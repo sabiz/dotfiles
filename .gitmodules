@@ -1,0 +1,63 @@
+[submodule ".vim/pack/plugin/start/vim-autoclose"]
+	path = .vim/pack/plugin/start/vim-autoclose
+	url = https://github.com/Townk/vim-autoclose.git
+[submodule ".vim/pack/plugin/start/tcomment_vim"]
+	path = .vim/pack/plugin/start/tcomment_vim
+	url = https://github.com/tomtom/tcomment_vim.git
+[submodule ".vim/pack/plugin/start/vim-gitgutter"]
+	path = .vim/pack/plugin/start/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter.git
+[submodule ".vim/pack/plugin/start/vim-quickhl"]
+	path = .vim/pack/plugin/start/vim-quickhl
+	url = https://github.com/t9md/vim-quickhl.git
+[submodule ".vim/pack/plugin/start/lightline.vim"]
+	path = .vim/pack/plugin/start/lightline.vim
+	url = https://github.com/itchyny/lightline.vim.git
+[submodule ".vim/pack/plugin/start/vim-indent-guides"]
+	path = .vim/pack/plugin/start/vim-indent-guides
+	url = https://github.com/nathanaelkane/vim-indent-guides.git
+[submodule ".vim/pack/plugin/start/molokai"]
+	path = .vim/pack/plugin/start/molokai
+	url = https://github.com/tomasr/molokai.git
+[submodule ".vim/pack/plugin/start/ale"]
+	path = .vim/pack/plugin/start/ale
+	url = https://github.com/w0rp/ale.git
+[submodule ".vim/pack/plugin/start/rainbow_csv"]
+	path = .vim/pack/plugin/start/rainbow_csv
+	url = https://github.com/mechatroner/rainbow_csv.git
+[submodule ".vim/pack/plugin/start/ack.vim"]
+	path = .vim/pack/plugin/start/ack.vim
+	url = https://github.com/mileszs/ack.vim.git
+[submodule ".vim/pack/plugin/start/vim-buftabline"]
+	path = .vim/pack/plugin/start/vim-buftabline
+	url = https://github.com/ap/vim-buftabline.git
+[submodule ".vim/pack/plugin/start/skyline-color.vim"]
+	path = .vim/pack/plugin/start/skyline-color.vim
+	url = https://github.com/sabiz/skyline-color.vim.git
+[submodule ".vim/pack/plugin/start/tagbar"]
+	path = .vim/pack/plugin/start/tagbar
+	url = https://github.com/majutsushi/tagbar
+[submodule ".vim/pack/plugin/start/vim-cheatsheet"]
+	path = .vim/pack/plugin/start/vim-cheatsheet
+	url = https://github.com/reireias/vim-cheatsheet.git
+[submodule ".vim/pack/plugin/start/asyncomplete.vim"]
+	path = .vim/pack/plugin/start/asyncomplete.vim
+	url = https://github.com/prabirshrestha/asyncomplete.vim.git
+[submodule ".vim/pack/plugin/start/async.vim"]
+	path = .vim/pack/plugin/start/async.vim
+	url = https://github.com/prabirshrestha/async.vim.git
+[submodule ".vim/pack/plugin/start/vim-lsp"]
+	path = .vim/pack/plugin/start/vim-lsp
+	url = https://github.com/prabirshrestha/vim-lsp.git
+[submodule ".vim/pack/plugin/start/asyncomplete-lsp.vim"]
+	path = .vim/pack/plugin/start/asyncomplete-lsp.vim
+	url = https://github.com/prabirshrestha/asyncomplete-lsp.vim.git
+[submodule ".vim/pack/plugin/start/asyncomplete-file.vim"]
+	path = .vim/pack/plugin/start/asyncomplete-file.vim
+	url = https://github.com/prabirshrestha/asyncomplete-file.vim.git
+[submodule ".vim/pack/plugin/start/asyncomplete-buffer.vim"]
+	path = .vim/pack/plugin/start/asyncomplete-buffer.vim
+	url = https://github.com/prabirshrestha/asyncomplete-buffer.vim.git
+[submodule ".vim/pack/plugin/start/vaffle.vim"]
+	path = .vim/pack/plugin/start/vaffle.vim
+	url = https://github.com/cocopon/vaffle.vim.git
