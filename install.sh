@@ -24,15 +24,15 @@ chmod a+x ~/.util/git-prompt.sh
 
 [[ ! -e ~/.util/enhancd ]] && git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
 
-# link dotfiles -------------------------------
+# copy dotfiles -------------------------------
 if [ $OS = 'Mac' ];then
-    ln -fs ~/dotfiles/.bashrc ~/.bash_profile
+    cp ~/dotfiles/.bashrc ~/.bash_profile
     echo "source ~/.bash_profile" > ~/.bashrc
 else
-    ln -fs ~/dotfiles/.bashrc ~/.bashrc
+    cp ~/dotfiles/.bashrc ~/.bashrc
 fi
 
-ln -fs ~/dotfiles/.vimrc ~/.vimrc
-ln -fs ~/dotfiles/.vim ~/.vim
+cp ~/dotfiles/.vimrc ~/.vimrc
+cp ~/dotfiles/.vim ~/.vim
 
 echo Done.
