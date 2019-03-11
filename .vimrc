@@ -92,6 +92,56 @@ augroup END
 """""""""""""""""""""""""""""""""""""
 " Plugin Config
 """""""""""""""""""""""""""""""""""""
+" Plugin install --------------------------
+if has('win32')
+    let PLUGIN_PATH = expand('~/vimfiles/pack/plugin/start/')
+else
+    let PLUGIN_PATH = expand('~/.vim/pack/plugin/start/')
+endif
+if !isdirectory(PLUGIN_PATH)
+    call mkdir(PLUGIN_PATH, 'p')
+endif
+let PLUGIN_LIST = {
+    \'ack.vim' : 'https://github.com/mileszs/ack.vim.git',
+    \'ale' : 'https://github.com/w0rp/ale.git',
+    \'async.vim' : 'https://github.com/prabirshrestha/async.vim.git',
+    \'asyncomplete-buffer.vim' : 'https://github.com/prabirshrestha/asyncomplete-buffer.vim.git',
+    \'asyncomplete-file.vim' : 'https://github.com/prabirshrestha/asyncomplete-file.vim.git',
+    \'asyncomplete-lsp.vim' : 'https://github.com/prabirshrestha/asyncomplete-lsp.vim.git',
+    \'asyncomplete.vim' : 'https://github.com/prabirshrestha/asyncomplete.vim.git',
+    \'lightline.vim' : 'https://github.com/itchyny/lightline.vim.git',
+    \'molokai' : 'https://github.com/tomasr/molokai.git',
+    \'rainbow_csv' : 'https://github.com/mechatroner/rainbow_csv.git',
+    \'skyline-color.vim' : 'https://github.com/sabiz/skyline-color.vim.git',
+    \'tagbar' : 'https://github.com/majutsushi/tagbar',
+    \'tcomment_vim' : 'https://github.com/tomtom/tcomment_vim.git',
+    \'vaffle.vim' : 'https://github.com/cocopon/vaffle.vim.git',
+    \'vim-autoclose' : 'https://github.com/Townk/vim-autoclose.git',
+    \'vim-buftabline' : 'https://github.com/ap/vim-buftabline.git',
+    \'vim-cheatsheet' : 'https://github.com/reireias/vim-cheatsheet.git',
+    \'vim-gitgutter' : 'https://github.com/airblade/vim-gitgutter.git',
+    \'vim-indent-guides' : 'https://github.com/nathanaelkane/vim-indent-guides.git',
+    \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
+    \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git'
+    \}
+
+if executable('git')
+    for i in keys(PLUGIN_LIST)
+        let clonePath = PLUGIN_PATH . i
+        if isdirectory(clonePath)
+            continue
+        endif
+        call system('git ' . 'clone ' . PLUGIN_LIST[i] . ' ' . clonePath)
+        if v:shell_error == 0
+            echo i . ' OK'
+        else
+            echo i . ' Error...'
+        endif
+    endfor
+else
+    echo 'Cannot find [git]...'
+endif
+
 " TComment --------------------------
 vmap <Leader>c gcc
 nmap <Leader>c gcc
