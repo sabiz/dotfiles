@@ -126,7 +126,17 @@ let PLUGIN_LIST = {
     \}
 
 if executable('git')
-    for i in keys(PLUGIN_LIST)
+    let pluginNames = keys(PLUGIN_LIST)
+    " Remove unused plugins
+    let dirList = split(expand(PLUGIN_PATH . '*'), '\n')
+    for d in dirList
+        if match(pluginNames, fnamemodify(d, ':t')) == -1
+            call delete(expand(d), 'rf')
+            echo 'Delete ' . fnamemodify(d, ':t')
+        endif
+    endfor
+
+    for i in pluginNames
         let clonePath = PLUGIN_PATH . i
         if isdirectory(clonePath)
             continue
