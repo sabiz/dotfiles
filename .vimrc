@@ -115,6 +115,7 @@ let PLUGIN_LIST = {
     \'skyline-color.vim' : 'https://github.com/sabiz/skyline-color.vim.git',
     \'tagbar' : 'https://github.com/majutsushi/tagbar',
     \'tcomment_vim' : 'https://github.com/tomtom/tcomment_vim.git',
+    \'typescript-vim' : 'https://github.com/leafgarland/typescript-vim.git',
     \'vaffle.vim' : 'https://github.com/cocopon/vaffle.vim.git',
     \'vim-autoclose' : 'https://github.com/Townk/vim-autoclose.git',
     \'vim-buftabline' : 'https://github.com/ap/vim-buftabline.git',
@@ -261,6 +262,13 @@ if executable('bash-language-server')
         \ 'whitelist': ['sh'],
         \ })
 endif
-
+if executable('typescript-language-server')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript', 'typescript.tsx'],
+        \ })
+endif
 
 
