@@ -109,6 +109,7 @@ let PLUGIN_LIST = {
     \'asyncomplete-file.vim' : 'https://github.com/prabirshrestha/asyncomplete-file.vim.git',
     \'asyncomplete-lsp.vim' : 'https://github.com/prabirshrestha/asyncomplete-lsp.vim.git',
     \'asyncomplete.vim' : 'https://github.com/prabirshrestha/asyncomplete.vim.git',
+    \'editorconfig-vim' : 'https://github.com/editorconfig/editorconfig-vim.git',
     \'lightline.vim' : 'https://github.com/itchyny/lightline.vim.git',
     \'molokai' : 'https://github.com/tomasr/molokai.git',
     \'rainbow_csv' : 'https://github.com/mechatroner/rainbow_csv.git',
