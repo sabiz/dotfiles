@@ -82,7 +82,7 @@ augroup highlightZenkakuSpace
     autocmd VimEnter,ColorScheme * highlight ZenkakuSpace term=underline ctermbg=Red guibg=Red
     autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
 augroup END
-autocmd vimenter * ALEToggle
+autocmd vimenter * ALEEnable
 augroup molokaiTablineScheme
   autocmd!
   autocmd ColorScheme * highlight TabLineSel term=NONE cterm=NONE ctermfg=233 ctermbg=161 gui=NONE guifg=#232526 guibg=#F92672
