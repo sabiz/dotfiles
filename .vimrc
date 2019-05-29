@@ -106,7 +106,7 @@ let PLUGIN_LIST = {
     \'ale' : 'https://github.com/w0rp/ale.git',
     \'async.vim' : 'https://github.com/prabirshrestha/async.vim.git',
     \'asyncomplete-buffer.vim' : 'https://github.com/prabirshrestha/asyncomplete-buffer.vim.git',
-    \'asyncomplete-file.vim' : 'https://github.com/prabirshrestha/asyncomplete-file.vim.git',
+    \'asyncomplete-file.vim' : 'https://github.com/sabiz/asyncomplete-file.vim.git',
     \'asyncomplete-lsp.vim' : 'https://github.com/prabirshrestha/asyncomplete-lsp.vim.git',
     \'asyncomplete.vim' : 'https://github.com/prabirshrestha/asyncomplete.vim.git',
     \'editorconfig-vim' : 'https://github.com/editorconfig/editorconfig-vim.git',
