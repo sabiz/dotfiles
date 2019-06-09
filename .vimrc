@@ -124,7 +124,8 @@ let PLUGIN_LIST = {
     \'vim-gitgutter' : 'https://github.com/airblade/vim-gitgutter.git',
     \'vim-indent-guides' : 'https://github.com/nathanaelkane/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
-    \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git'
+    \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
+    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline'
     \}
 
 if executable('git')
