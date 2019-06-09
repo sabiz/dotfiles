@@ -11,11 +11,11 @@ fi
 # UI ------------------------------------------
 if [ $OS = 'Linux' ];then
     mkdir -p ~/.local/share/fonts
-    curl -OL https://github.com/yuru7/HackGen/releases/download/v0.5.0/HackGen_v0.5.0.zip
-    mv HackGen_v0.5.0.zip ~/.local/share/fonts/.
     cd ~/.local/share/fonts
-    unzip HackGen_v0.5.0.zip
-    rm -rf HackGen_v0.5.0.zip
+    hackgen_ver="v0.8.2"
+    curl -OL https://github.com/yuru7/HackGen/releases/download/${hackgen_ver}/HackGen_${hackgen_ver}.zip
+    unzip -o HackGen_${hackgen_ver}.zip
+    rm -rf HackGen_${hackgen_ver}.zip
     fc-cache -f -v
 fi
 
