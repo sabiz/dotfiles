@@ -12,7 +12,7 @@ fi
 if [ $OS = 'Linux' ];then
     mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts
-    hackgen_ver="v0.8.2"
+    hackgen_ver="v1.4.1"
     curl -OL https://github.com/yuru7/HackGen/releases/download/${hackgen_ver}/HackGen_${hackgen_ver}.zip
     unzip -o HackGen_${hackgen_ver}.zip
     rm -rf HackGen_${hackgen_ver}.zip
