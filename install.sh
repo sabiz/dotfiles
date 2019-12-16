@@ -35,10 +35,12 @@ chmod a+x ~/.util/git-prompt.sh
 
 [[ ! -e ~/.util/enhancd ]] && git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
 
+if [ $OS = 'Mac' ];then
+    [[ ! -e ~/.util/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ~/.util/zsh-completions
+fi
 # copy dotfiles -------------------------------
 if [ $OS = 'Mac' ];then
-    cp ~/dotfiles/.bashrc ~/.bash_profile
-    echo "source ~/.bash_profile" > ~/.bashrc
+    cp ~/dotfiles/.zshrc ~/.zshrc
 else
     cp ~/dotfiles/.bashrc ~/.bashrc
 fi
