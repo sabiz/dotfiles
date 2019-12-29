@@ -54,6 +54,7 @@ if has('gui_running')
 endif
 set nomousefocus
 set mousehide
+set belloff=all
 filetype on
 filetype plugin on
 filetype indent on
