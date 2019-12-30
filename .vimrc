@@ -126,7 +126,8 @@ let PLUGIN_LIST = {
     \'vim-indent-guides' : 'https://github.com/nathanaelkane/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
-    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline'
+    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
+    \'editorconfig' : 'https://github.com/editorconfig/editorconfig-vim'
     \}
 
 if executable('git')
