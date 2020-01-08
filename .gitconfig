@@ -1,0 +1,16 @@
+[core]
+	fileMode = false
+	hideDotFiles = false
+	ignorecase = false
+	quotepath = false
+	safecrlf = true
+	autocrlf = false
+	editor = vim
+	ui = auto
+[user]
+	name = sAbIz
+	email = bellett@sabiz.jp
+[push]
+	default = current
+[merge]
+	tool = vimdiff
