@@ -124,8 +124,7 @@ let PLUGIN_LIST = {
     \'vim-indent-guides' : 'https://github.com/sabiz/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
-    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
-    \'editorconfig' : 'https://github.com/editorconfig/editorconfig-vim'
+    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline'
     \}
 
 if executable('git')
@@ -154,6 +153,7 @@ if executable('git')
 else
     echo 'Cannot find [git]...'
 endif
+autocmd vimenter * helptags ALL
 
 " TComment --------------------------
 vmap <Leader>c gcc
