@@ -84,7 +84,6 @@ augroup highlightZenkakuSpace
     autocmd VimEnter,ColorScheme * highlight ZenkakuSpace term=underline ctermbg=Red guibg=Red
     autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
 augroup END
-autocmd vimenter * ALEEnable
 augroup molokaiTablineScheme
   autocmd!
   autocmd ColorScheme * highlight TabLineSel term=NONE cterm=NONE ctermfg=233 ctermbg=161 gui=NONE guifg=#232526 guibg=#F92672
@@ -105,7 +104,6 @@ if !isdirectory(PLUGIN_PATH)
 endif
 let PLUGIN_LIST = {
     \'ack.vim' : 'https://github.com/mileszs/ack.vim.git',
-    \'ale' : 'https://github.com/w0rp/ale.git',
     \'async.vim' : 'https://github.com/prabirshrestha/async.vim.git',
     \'asyncomplete-buffer.vim' : 'https://github.com/prabirshrestha/asyncomplete-buffer.vim.git',
     \'asyncomplete-file.vim' : 'https://github.com/sabiz/asyncomplete-file.vim.git',
@@ -196,13 +194,6 @@ let g:rehash256 = 1
 syntax on
 set cursorline
 set t_Co=256
-
-" ale -------------------------------
-nnoremap <Leader>al <ESC>:ALEToggle<Return>
-let g:ale_linters = {
-\   'html': [],
-\   'javascript': ['eslint'],
-\   }
 
 " SkylineColor ----------------------
 let g:SkylineColor_TimeFormat = '%Y/%m/%d(%a) %H:%M'
