@@ -105,7 +105,6 @@ endif
 let PLUGIN_LIST = {
     \'ack.vim' : 'https://github.com/mileszs/ack.vim.git',
     \'async.vim' : 'https://github.com/prabirshrestha/async.vim.git',
-    \'asyncomplete-buffer.vim' : 'https://github.com/prabirshrestha/asyncomplete-buffer.vim.git',
     \'asyncomplete-file.vim' : 'https://github.com/prabirshrestha/asyncomplete-file.vim',
     \'asyncomplete-lsp.vim' : 'https://github.com/prabirshrestha/asyncomplete-lsp.vim.git',
     \'asyncomplete.vim' : 'https://github.com/prabirshrestha/asyncomplete.vim.git',
@@ -231,12 +230,6 @@ autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#s
     \ 'whitelist': ['*'],
     \ 'priority': 10,
     \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'whitelist': ['*'],
-    \ 'blacklist': [''],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
     \ }))
 if executable('sourcekit-lsp')
     autocmd User lsp_setup call lsp#register_server({
