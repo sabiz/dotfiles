@@ -116,7 +116,6 @@ let PLUGIN_LIST = {
     \'skyline-color.vim' : 'https://github.com/sabiz/skyline-color.vim.git',
     \'tagbar' : 'https://github.com/majutsushi/tagbar',
     \'tcomment_vim' : 'https://github.com/tomtom/tcomment_vim.git',
-    \'typescript-vim' : 'https://github.com/leafgarland/typescript-vim.git',
     \'vaffle.vim' : 'https://github.com/cocopon/vaffle.vim.git',
     \'vim-autoclose' : 'https://github.com/Townk/vim-autoclose.git',
     \'vim-buftabline' : 'https://github.com/ap/vim-buftabline.git',
