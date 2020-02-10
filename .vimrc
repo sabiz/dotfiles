@@ -121,7 +121,7 @@ let PLUGIN_LIST = {
     \'vim-buftabline' : 'https://github.com/ap/vim-buftabline.git',
     \'vim-cheatsheet' : 'https://github.com/reireias/vim-cheatsheet.git',
     \'vim-gitgutter' : 'https://github.com/airblade/vim-gitgutter.git',
-    \'vim-indent-guides' : 'https://github.com/nathanaelkane/vim-indent-guides.git',
+    \'vim-indent-guides' : 'https://github.com/sabiz/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
     \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
@@ -225,6 +225,7 @@ let g:cheatsheet#cheat_file = '~/.vim/doc/cheat_sheet.md'
 " let g:lsp_log_verbose = 1
 " let g:lsp_log_file = expand('~/vim-lsp.log')
 let g:lsp_async_completion = 1
+let g:lsp_diagnostics_float_cursor = 1
 autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
     \ 'name': 'file',
     \ 'whitelist': ['*'],
