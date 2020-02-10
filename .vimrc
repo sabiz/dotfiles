@@ -27,6 +27,7 @@ set fileformats=unix,dos
 set hidden
 set autoread
 set history=1000
+set updatetime=1000
 set nobackup
 set incsearch
 set hlsearch
@@ -166,11 +167,12 @@ nmap <Leader>f <ESC>:Vaffle<Return>
 let g:vaffle_auto_cd = 1
 
 " GitGutter -------------------------
-nmap <Leader>g] <Plug>GitGutterNextHunk
-nmap <Leader>g[ <Plug>GitGutterPrevHunk
-autocmd vimenter * GitGutterEnable 
+nmap <Leader>g] <Plug>(GitGutterNextHunk)
+nmap <Leader>g[ <Plug>(GitGutterPrevHunk)
+nmap <Leader>gp <Plug>(GitGutterPreviewHunk)
 autocmd vimenter * GitGutterLineHighlightsToggle
 let g:gitgutter_max_signs = 10000
+let g:gitgutter_preview_win_floating = 1
 
 " quickhl ---------------------------
 nmap <Leader>m <Plug>(quickhl-manual-this)
