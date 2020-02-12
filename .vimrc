@@ -89,6 +89,7 @@ augroup molokaiTablineScheme
   autocmd ColorScheme * highlight TabLineSel term=NONE cterm=NONE ctermfg=233 ctermbg=161 gui=NONE guifg=#232526 guibg=#F92672
   autocmd ColorScheme * highlight TabLine term=NONE cterm=NONE ctermfg=161 ctermbg=233 gui=NONE guifg=#f92672 guibg=#232526
 augroup END
+au BufRead,BufNewFile *.svelte set filetype=svelte
 
 """""""""""""""""""""""""""""""""""""
 " Plugin Config
@@ -124,7 +125,8 @@ let PLUGIN_LIST = {
     \'vim-indent-guides' : 'https://github.com/sabiz/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
-    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline'
+    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
+    \'vim-svelte' : 'https://github.com/burner/vim-svelte.git'
     \}
 
 if executable('git')
