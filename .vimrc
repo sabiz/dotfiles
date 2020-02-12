@@ -178,7 +178,11 @@ nmap <Space>M <Plug>(quickhl-manual-reset)
 xmap <Space>M <Plug>(quickhl-manual-reset)
 
 " Ack -------------------------------
-let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('rg')
+    let g:ackprg = 'rg --vimgrep --no-heading'
+else
+    let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
 nnoremap <Leader>ag :exe("Ack ".expand('<cword>'))<Return>
 
 " indent guides ---------------------
