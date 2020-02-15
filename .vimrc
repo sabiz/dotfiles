@@ -106,7 +106,6 @@ endif
 let PLUGIN_LIST = {
     \'ack.vim' : 'https://github.com/mileszs/ack.vim.git',
     \'async.vim' : 'https://github.com/prabirshrestha/async.vim.git',
-    \'asyncomplete-buffer.vim' : 'https://github.com/prabirshrestha/asyncomplete-buffer.vim.git',
     \'asyncomplete-file.vim' : 'https://github.com/prabirshrestha/asyncomplete-file.vim',
     \'asyncomplete-lsp.vim' : 'https://github.com/prabirshrestha/asyncomplete-lsp.vim.git',
     \'asyncomplete.vim' : 'https://github.com/prabirshrestha/asyncomplete.vim.git',
@@ -142,20 +141,23 @@ if executable('git')
 
     for i in pluginNames
         let clonePath = PLUGIN_PATH . i
-        if isdirectory(clonePath)
-            continue
+        if !isdirectory(clonePath)
+            call system('git ' . 'clone ' . PLUGIN_LIST[i] . ' ' . clonePath)
+            if v:shell_error == 0
+                echo i . ' OK'
+            else
+                echo i . ' Error...'
+                continue
+            endif
         endif
-        call system('git ' . 'clone ' . PLUGIN_LIST[i] . ' ' . clonePath)
-        if v:shell_error == 0
-            echo i . ' OK'
-        else
-            echo i . ' Error...'
+        let docPath = clonePath . '/doc'
+        if isdirectory(docPath)
+            eval('autocmd vimenter * helptags ' . expand(docPath))
         endif
     endfor
 else
     echo 'Cannot find [git]...'
 endif
-autocmd vimenter * helptags ALL
 
 " TComment --------------------------
 vmap <Leader>c gcc
@@ -237,12 +239,6 @@ autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#s
     \ 'whitelist': ['*'],
     \ 'priority': 10,
     \ 'completor': function('asyncomplete#sources#file#completor')
-    \ }))
-autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-    \ 'name': 'buffer',
-    \ 'whitelist': ['*'],
-    \ 'blacklist': [''],
-    \ 'completor': function('asyncomplete#sources#buffer#completor'),
     \ }))
 if executable('sourcekit-lsp')
     autocmd User lsp_setup call lsp#register_server({
