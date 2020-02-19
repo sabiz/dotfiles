@@ -89,6 +89,7 @@ augroup molokaiTablineScheme
   autocmd ColorScheme * highlight TabLineSel term=NONE cterm=NONE ctermfg=233 ctermbg=161 gui=NONE guifg=#232526 guibg=#F92672
   autocmd ColorScheme * highlight TabLine term=NONE cterm=NONE ctermfg=161 ctermbg=233 gui=NONE guifg=#f92672 guibg=#232526
 augroup END
+au BufRead,BufNewFile *.svelte set filetype=svelte
 
 """""""""""""""""""""""""""""""""""""
 " Plugin Config
@@ -123,7 +124,8 @@ let PLUGIN_LIST = {
     \'vim-indent-guides' : 'https://github.com/sabiz/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
-    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline'
+    \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
+    \'vim-svelte' : 'https://github.com/burner/vim-svelte.git'
     \}
 
 if executable('git')
@@ -139,20 +141,23 @@ if executable('git')
 
     for i in pluginNames
         let clonePath = PLUGIN_PATH . i
-        if isdirectory(clonePath)
-            continue
+        if !isdirectory(clonePath)
+            call system('git ' . 'clone ' . PLUGIN_LIST[i] . ' ' . clonePath)
+            if v:shell_error == 0
+                echo i . ' OK'
+            else
+                echo i . ' Error...'
+                continue
+            endif
         endif
-        call system('git ' . 'clone ' . PLUGIN_LIST[i] . ' ' . clonePath)
-        if v:shell_error == 0
-            echo i . ' OK'
-        else
-            echo i . ' Error...'
+        let docPath = clonePath . '/doc'
+        if isdirectory(docPath)
+            eval('autocmd vimenter * helptags ' . expand(docPath))
         endif
     endfor
 else
     echo 'Cannot find [git]...'
 endif
-autocmd vimenter * helptags ALL
 
 " TComment --------------------------
 vmap <Leader>c gcc
@@ -177,7 +182,11 @@ nmap <Space>M <Plug>(quickhl-manual-reset)
 xmap <Space>M <Plug>(quickhl-manual-reset)
 
 " Ack -------------------------------
-let g:ackprg = 'ag --nogroup --nocolor --column'
+if executable('rg')
+    let g:ackprg = 'rg --vimgrep --no-heading'
+else
+    let g:ackprg = 'ag --nogroup --nocolor --column'
+endif
 nnoremap <Leader>ag :exe("Ack ".expand('<cword>'))<Return>
 
 " indent guides ---------------------
@@ -254,11 +263,11 @@ if executable('bash-language-server')
 endif
 if executable('typescript-language-server')
     au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript-language-server',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'typescript.tsx'],
-        \ })
+    \ 'name': 'javascript support using typescript-language-server',
+    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+    \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
+    \ 'whitelist': ['javascript', 'javascript.jsx', 'javascriptreact', 'typescript', 'typescript.tsx'],
+    \ })
 endif
 if executable('rls')
     au User lsp_setup call lsp#register_server({
@@ -274,5 +283,12 @@ if executable('clangd')
         \ 'cmd': {server_info->['clangd', '-background-index']},
         \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
         \ })
+endif
+if executable('html-languageserver')
+    au User lsp_setup call lsp#register_server({
+                \ 'name': 'html-languageserver',
+                \ 'cmd': {server_info->[&shell, &shellcmdflag, 'html-languageserver --stdio']},
+                \ 'whitelist': ['html'],
+                \ })
 endif
 
