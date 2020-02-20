@@ -1,0 +1,51 @@
+*cheatsheet*	My Cheat Sheet
+
+Version: 1.0
+Author: sAbIz <bellett at sabiz.jp>
+License: MIT license
+
+==============================================================================
+NORMAL					*cheat-vim-normal*
+
+移動 					*cheat-vim-normal-move*
+
+    画面内					*cheat-vim-normal-move-disp*
+    H - 画面先頭に移動
+    M - 画面中央に移動
+    L - 画面最下に移動
+
+    行内					*cheat-vim-normal-move-line*
+    ^ - 行頭に移動
+    $ - 行末に移動
+    fx - 次のxまで移動
+    tx - 次のxの前まで移動
+    Fx - 前のxまで移動
+    Tx - 前のxの前まで移動
+    ; - 直前のf,t,F,Tの繰り返し
+    , - 直前のf,t,F,Tを反対に繰り返し
+
+    単語					*cheat-vim-normal-move-word*
+    w - 単語先頭に移動
+    e - 単語末尾に移動
+    b - 単語の先頭へ戻る
+    % - 対応する括弧に移動
+
+編集					*cheat-vim-normal-edit*
+
+    r - 一文字置き換え
+    J - 下の行を結合する
+    gJ - 下の行を結合する（スペースなし）
+    cc - 行を削除して挿入モード
+    c$ - 末尾まで削除して挿入モード
+    ciw - 単語を削除して挿入モード
+    s - 一文字削除して挿入モード
+==============================================================================
+INSERT					*cheat-vim-insert*
+
+    <Ctrl-t> - インデント
+    <Ctrl-d> - インデント削除
+    <Ctrl-w> - 単語削除
+    <Ctrl-u> - カーソル以前を削除
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:

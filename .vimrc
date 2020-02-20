@@ -90,7 +90,11 @@ augroup molokaiTablineScheme
   autocmd ColorScheme * highlight TabLine term=NONE cterm=NONE ctermfg=161 ctermbg=233 gui=NONE guifg=#f92672 guibg=#232526
 augroup END
 au BufRead,BufNewFile *.svelte set filetype=svelte
-
+if has('win32')
+    au VimEnter * helptags ~/vimfiles/doc
+else
+    au VimEnter * helptags ~/.vim/doc
+endif
 """""""""""""""""""""""""""""""""""""
 " Plugin Config
 """""""""""""""""""""""""""""""""""""
@@ -119,7 +123,6 @@ let PLUGIN_LIST = {
     \'vaffle.vim' : 'https://github.com/cocopon/vaffle.vim.git',
     \'vim-autoclose' : 'https://github.com/Townk/vim-autoclose.git',
     \'vim-buftabline' : 'https://github.com/ap/vim-buftabline.git',
-    \'vim-cheatsheet' : 'https://github.com/reireias/vim-cheatsheet.git',
     \'vim-gitgutter' : 'https://github.com/airblade/vim-gitgutter.git',
     \'vim-indent-guides' : 'https://github.com/sabiz/vim-indent-guides.git',
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
@@ -225,9 +228,6 @@ nmap<silent> <Leader>o :TagbarToggle<CR>
 
 " asyncomplete ----------------------
 let g:asyncomplete_auto_popup = 1
-
-" vim-cheatsheet ----------------------
-let g:cheatsheet#cheat_file = '~/.vim/doc/cheat_sheet.md'
 
 " vim-lsp ---------------------------
 " let g:lsp_log_verbose = 1

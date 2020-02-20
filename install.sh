@@ -46,6 +46,6 @@ else
 fi
 
 cp ~/dotfiles/.vimrc ~/.vimrc
-cp ~/dotfiles/.vim ~/.vim
+cp -R ~/dotfiles/.vim ~/.vim
 
 echo Done.
