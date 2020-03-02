@@ -26,7 +26,8 @@ let s:plugin_list = {
     \'vim-lsp' : 'https://github.com/prabirshrestha/vim-lsp.git',
     \'vim-quickhl' : 'https://github.com/t9md/vim-quickhl.git',
     \'vim-auto-cursorline' : 'https://github.com/delphinus/vim-auto-cursorline',
-    \'vim-svelte' : 'https://github.com/burner/vim-svelte.git'
+    \'vim-svelte' : 'https://github.com/burner/vim-svelte.git',
+    \'vim-c2view' : 'https://github.com/sabiz/vim-c2view.git'
     \}
 
 let s:plugin_path=expand(g:vim_home_runtime_path.'/pack/plugin/start/')
