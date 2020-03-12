@@ -34,7 +34,8 @@ let s:plugin_list = {
 let s:plugin_path=expand(g:vim_home_runtime_path.'/pack/plugin/start/')
 let s:vim_home_runtime_conf_plugin_path = g:vim_home_runtime_conf_path.'/plugin'
 
-function! UpdatePlugin()
+function! s:updatePlugin()
+
     if !isdirectory(s:plugin_path)
         call mkdir(s:plugin_path, 'p')
     endif
@@ -49,21 +50,34 @@ function! UpdatePlugin()
         endif
     endfor
 
+    let job_list = []
     for k in pluginNames
         let clonePath = s:plugin_path . k
         if !isdirectory(clonePath)
-            call system('git ' . 'clone ' . s:plugin_list[k] . ' ' . clonePath)
-            if v:shell_error == 0
-                echo k . ' OK'
-            else
-                echo k . ' Error...'
-                continue
-            endif
+            redraw!
+            let cmd = 'git ' . 'clone ' . s:plugin_list[k] . ' ' . clonePath
+            let job = job_start(cmd, #{in_io: 'null', out_io: 'null', err_io: 'null'})
+            call add(job_list, #{name: k, job: job})
         endif
     endfor
+    while empty(job_list) == 0
+        function! s:checkJobStatus(idx, val)
+            let st = job_status(a:val.job)
+            if st == 'dead'
+                let exitval = job_info(a:val.job).exitval
+                if exitval == 0
+                    echon "\rDone: ".a:val.name."                         "
+                elseif
+                    echon "\nFail: ".a:val.name."\n"
+                endif
+            endif
+            return st !=# 'dead'
+        endfunction
+        call filter(job_list, function("s:checkJobStatus"))
+    endwhile
 endfunction
 
-function! LoadPlugin()
+function! s:loadPlugin()
     let pluginNames = keys(s:plugin_list)
     for k in pluginNames
         let pluginPath = s:plugin_path.k
@@ -84,8 +98,7 @@ function! LoadPlugin()
     endfor
 endfunction
 
+call s:updatePlugin()
 
-call UpdatePlugin()
-
-call LoadPlugin()
+call s:loadPlugin()
 
