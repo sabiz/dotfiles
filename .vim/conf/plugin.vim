@@ -34,6 +34,19 @@ let s:plugin_list = {
 let s:plugin_path=expand(g:vim_home_runtime_path.'/pack/plugin/start/')
 let s:vim_home_runtime_conf_plugin_path = g:vim_home_runtime_conf_path.'/plugin'
 
+function! s:echoMessage(msg)
+    call echoraw("\x1b[2K".a:msg)
+endfunction
+
+function! s:clearScreen()
+    call echoraw("\x1b[2J")
+endfunction
+
+function! s:cursorMove(r,c)
+    call echoraw("\x1b[".a:r.";".a:c."H")
+endfunction
+
+
 function! s:updatePlugin()
 
     if !isdirectory(s:plugin_path)
@@ -43,21 +56,28 @@ function! s:updatePlugin()
     let pluginNames = keys(s:plugin_list)
     " Remove unused plugins
     let dirList = split(expand(s:plugin_path . '*'), '\n')
-    for d in dirList
-        if match(pluginNames, fnamemodify(d, ':t')) == -1
-            call delete(expand(d), 'rf')
-            echo 'Delete ' . fnamemodify(d, ':t')
-        endif
-    endfor
+    call s:clearScreen()
+    call s:cursorMove(0, 0)
+    let cursorRow=0
+    if len(dirList) > 2
+        for d in dirList
+            if match(pluginNames, fnamemodify(d, ':t')) == -1
+                call delete(expand(d), 'rf')
+                call s:echoMessage("\x1b[35mDelete:\x1b[0m\t".fnamemodify(d, ':t')."\n")
+                let cursorRow+=1
+            endif
+        endfor
+    endif
 
     let job_list = []
     for k in pluginNames
         let clonePath = s:plugin_path . k
         if !isdirectory(clonePath)
-            redraw!
+            let cursorRow+=1
             let cmd = 'git ' . 'clone ' . s:plugin_list[k] . ' ' . clonePath
+            call s:echoMessage("\x1b[33mNew:\x1b[0m\t".k."\n")
             let job = job_start(cmd, #{in_io: 'null', out_io: 'null', err_io: 'null'})
-            call add(job_list, #{name: k, job: job})
+            call add(job_list, #{name: k, job: job, pos:cursorRow})
         endif
     endfor
     while empty(job_list) == 0
@@ -65,16 +85,19 @@ function! s:updatePlugin()
             let st = job_status(a:val.job)
             if st == 'dead'
                 let exitval = job_info(a:val.job).exitval
+                call s:cursorMove(a:val.pos, 0)
                 if exitval == 0
-                    echon "\rDone: ".a:val.name."                         "
-                elseif
-                    echon "\nFail: ".a:val.name."\n"
+                    call s:echoMessage("\x1b[34mSuccess:\x1b[0m\t".a:val.name."\n")
+                else
+                    call s:echoMessage("\x1b[31mFailed:\x1b[0m\t".a:val.name."\n")
+                    echon " "
                 endif
             endif
             return st !=# 'dead'
         endfunction
         call filter(job_list, function("s:checkJobStatus"))
     endwhile
+    call s:cursorMove(cursorRow, 0)
 endfunction
 
 function! s:loadPlugin()
