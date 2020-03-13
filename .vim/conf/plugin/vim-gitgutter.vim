@@ -4,3 +4,5 @@ nmap <Leader>gp <Plug>(GitGutterPreviewHunk)
 autocmd vimenter * GitGutterLineHighlightsToggle
 let g:gitgutter_max_signs = 10000
 let g:gitgutter_preview_win_floating = 1
+
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:

@@ -125,3 +125,4 @@ call s:updatePlugin()
 
 call s:loadPlugin()
 
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
