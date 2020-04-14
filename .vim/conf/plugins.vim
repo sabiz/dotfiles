@@ -23,7 +23,8 @@ let g:plugin_list = [
       \'delphinus/vim-auto-cursorline',
       \'burner/vim-svelte.git',
       \'sabiz/vim-c2view.git',
-      \'thinca/vim-themis'
+      \'thinca/vim-themis',
+      \'tikhomirov/vim-glsl',
       \]
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
