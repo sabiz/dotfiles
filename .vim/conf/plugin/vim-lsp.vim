@@ -66,6 +66,12 @@ if executable('css-languageserver')
         \ 'whitelist': ['css', 'less', 'sass', 'scss'],
         \ })
 endif
-
+if executable('vscode-json-languageserver')
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'json-languageserver',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
+        \ 'whitelist': ['json', 'jsonc'],
+        \ })
+endif
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
