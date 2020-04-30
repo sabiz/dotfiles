@@ -50,7 +50,7 @@ PROMPT=$'%{\e[38;05;12m%}%*%{\e[0m%} - %{\e[38;05;208m%}%n@%m » %~ \$(__git_ps1
 %{\e[48;05;236;38;05;197m%}\$ %{\e[48;5;12m%}$ARROW %{\e[48;05;236m%}%{\e[38;05;12m%}$ARROW %{\e[0m%}'
 
 # Functions-----------------------------------------------
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export ENHANCD_FILTER=fzf
 source ~/.util/enhancd/init.sh
 
