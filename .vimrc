@@ -79,5 +79,5 @@ execute('source '.g:vim_home_runtime_conf_path.'/auto_cmd.vim')
 """""""""""""""""""""""""""""""""""""
 " Plugin Config
 """""""""""""""""""""""""""""""""""""
-execute('source'.g:vim_home_runtime_conf_path.'/plugin.vim')
+execute('source'.g:vim_home_runtime_conf_path.'/plugins.vim')
 
