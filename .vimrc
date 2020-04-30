@@ -1,7 +1,4 @@
 scriptencoding utf-8
-"""""""""""""""""""""""""""""""""""""
-" Common Config
-"""""""""""""""""""""""""""""""""""""
 set ignorecase
 set smartcase
 set tabstop=4
@@ -47,9 +44,9 @@ set lazyredraw
 set ttyfast
 set mouse-=a
 if has('gui_running')
-    set mouse=a
-    set columns=200
-    set lines=50
+  set mouse=a
+  set columns=200
+  set lines=50
 endif
 set nomousefocus
 set mousehide
@@ -60,24 +57,21 @@ filetype indent on
 
 let g:vim_home_runtime_path=expand('~/.vim')
 if has('win32')
-    let g:vim_home_runtime_path=expand('~/vimfiles')
+  let g:vim_home_runtime_path=expand('~/vimfiles')
 endif
 
 let g:vim_home_runtime_conf_path = g:vim_home_runtime_path.'/conf'
 
+let s:configurationFiles = [
+      \'key.vim',
+      \'auto_cmd.vim',
+      \'plugins.vim',
+      \'loader.vim'
+      \]
+for c in s:configurationFiles
+  if filereadable(g:vim_home_runtime_conf_path.'/'.c)
+    execute('source '.g:vim_home_runtime_conf_path.'/'.c)
+  endif
+endfor
 
-"""""""""""""""""""""""""""""""""""""
-" Key Binds
-"""""""""""""""""""""""""""""""""""""
-execute('source '.g:vim_home_runtime_conf_path.'/key.vim')
-
-"""""""""""""""""""""""""""""""""""""
-" Auto Command
-"""""""""""""""""""""""""""""""""""""
-execute('source '.g:vim_home_runtime_conf_path.'/auto_cmd.vim')
-
-"""""""""""""""""""""""""""""""""""""
-" Plugin Config
-"""""""""""""""""""""""""""""""""""""
-execute('source'.g:vim_home_runtime_conf_path.'/plugins.vim')
-
+" vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
