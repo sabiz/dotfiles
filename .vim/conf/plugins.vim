@@ -25,6 +25,7 @@ let g:plugin_list = [
       \'sabiz/vim-c2view.git',
       \'thinca/vim-themis',
       \'tikhomirov/vim-glsl',
+      \'ryanoasis/vim-devicons',
       \]
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
