@@ -26,6 +26,7 @@ let g:plugin_list = [
       \'thinca/vim-themis',
       \'tikhomirov/vim-glsl',
       \'ryanoasis/vim-devicons',
+      \'pseewald/vim-anyfold.git',
       \]
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:

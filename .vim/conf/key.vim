@@ -7,5 +7,6 @@ nnoremap<silent> <Leader><Left> :bprev<CR>
 nnoremap<silent> <Leader><Down> :bd<CR>
 command! TShell belowright terminal
 nnoremap <Leader>sh <ESC>:TShell<Return>
+nnoremap <Leader>z za
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:
