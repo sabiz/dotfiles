@@ -5,7 +5,9 @@ inoremap jj <Esc>
 nnoremap<silent> <Leader><Right> :bnext<CR>
 nnoremap<silent> <Leader><Left> :bprev<CR>
 nnoremap<silent> <Leader><Down> :bd<CR>
-command! TShell belowright terminal
+tnoremap<silent> <Leader><Right> <C-w>:bnext<CR>
+tnoremap<silent> <Leader><Left> <C-w>:bNext<CR>
+command! TShell terminal++hidden
 nnoremap <Leader>sh <ESC>:TShell<Return>
 nnoremap <Leader>z za
 
