@@ -50,5 +50,6 @@ fi
 
 cp ~/dotfiles/.vimrc ~/.vimrc
 cp -R ~/dotfiles/.vim ~/.vim
+cp ~/dotfiles/.gitconfig ~/.gitconfig
 
 echo Done.
