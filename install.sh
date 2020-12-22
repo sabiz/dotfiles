@@ -6,6 +6,9 @@ if [ "$(uname)" == 'Darwin' ];then
     OS='Mac'
 else
     OS='Linux'
+    if type "cmd.exe" > /dev/null 2>&1; then
+	OS='Linux_WSL'
+    fi
 fi
 
 # UI ------------------------------------------
