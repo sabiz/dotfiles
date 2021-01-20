@@ -19,6 +19,7 @@ let g:plugin_list = [
       \'airblade/vim-gitgutter.git',
       \'sabiz/vim-indent-guides.git',
       \'prabirshrestha/vim-lsp.git',
+      \'mattn/vim-lsp-settings',
       \'t9md/vim-quickhl.git',
       \'delphinus/vim-auto-cursorline',
       \'burner/vim-svelte.git',
