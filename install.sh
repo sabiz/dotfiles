@@ -1,13 +1,12 @@
 #!/bin/bash -eu
 
-
 #Getting OS
 if [ "$(uname)" == 'Darwin' ];then
     OS='Mac'
 else
     OS='Linux'
     if type "cmd.exe" > /dev/null 2>&1; then
-	OS='Linux_WSL'
+        OS='Linux_WSL'
     fi
 fi
 
@@ -15,11 +14,19 @@ fi
 if [ $OS = 'Linux' ];then
     mkdir -p ~/.local/share/fonts
     cd ~/.local/share/fonts
-    hackgen_ver="v2.2.2"
+    hackgen_ver="v2.5.1"
     curl -OL https://github.com/yuru7/HackGen/releases/download/${hackgen_ver}/HackGenNerd_${hackgen_ver}.zip
     unzip -o HackGenNerd_${hackgen_ver}.zip
     rm -rf HackGenNerd_${hackgen_ver}.zip
     fc-cache -f -v
+
+    sudo apt install exa
+
+elif [ $OS = 'Mac' ];then
+
+    echo "You need install exa (https://the.exa.website/)"
+
+
 fi
 
 # Util ----------------------------------------

@@ -1,12 +1,5 @@
 # .bashrc
 
-#Getting OS
-if [ "$(uname)" == 'Darwin' ];then
-    OS='Mac'
-else
-    OS='Linux'
-fi
-
 # Source global definitions
 [ -f /etc/bashrc ] && source /etc/bashrc
 
@@ -15,11 +8,7 @@ fi
 stty stop undef
 
 # Enviroment----------------------------------------------
-if [ $OS = 'Mac' ];then
-    export PATH=~/bin:/usr/local/bin:$PATH
-else
-    export PATH=~/bin:$PATH
-fi
+export PATH=~/bin:$PATH
 export PAGER=less
 export EDITOR=vim
 export HISTFILESIZE=20000
@@ -28,14 +17,9 @@ LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:c
 export LS_COLORS
 
 # Alias--------------------------------------------------
-if [ $OS = 'Mac' ];then
-    alias ls='ls -CFG'
-    alias ll='ls -AlFGh'
-else
-    alias ls='ls -CF --color=auto'
-    alias ll='ls -AlFh --show-control-chars --color=auto'
-fi
-alias la='ls -CFal'
+alias ls='exa -F --color=auto'
+alias ll='ls -AlFh --show-control-chars --color=auto'
+alias la='ls -Fal'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'

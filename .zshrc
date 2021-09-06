@@ -11,8 +11,8 @@ export HISTFILESIZE=20000
 export HISTSIZE=10000
 
 # Alias--------------------------------------------------
-alias ls='ls -CFG'
-alias ll='ls -AlFGh'
+alias ls='exa -Fg'
+alias ll='ls -AlFgh'
 alias la='ls -CFal'
 alias mv='mv -i'
 alias rm='rm -i'
