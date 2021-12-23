@@ -1,7 +1,17 @@
-#!/bin/bash -eu
+#!/bin/bash -u
 
-INSTALLER_VERSION='v0.5.0'
+###########################################
+###########################################
+
+INSTALLER_VERSION='v0.6.0'
 ESC=$(printf '\033')
+SCRIPT_PATH=$(dirname $0)/scripts/
+HACKGEN_VER="v2.5.3"
+TITLE_COLOR_ESCAPE="${ESC}[48;2;52;148;230m${ESC}[38;2;255;255;255m"
+
+export OS=$(${SCRIPT_PATH}get_os.sh)
+
+###########################################
 
 echo -e "
 ${ESC}[38;2;52;148;230m  ██████╗  ██████╗ ████████╗    ███████╗██╗██╗     ███████╗███████╗     
@@ -20,32 +30,32 @@ ${ESC}[38;2;236;110;173m  ╚═╝╚═╝  ╚═══╝╚═════�
 ${ESC}[m
 "
 
-#Getting OS
-if [ "$(uname)" == 'Darwin' ];then
-    OS='Mac'
-else
-    OS='Linux'
-    if type "cmd.exe" > /dev/null 2>&1; then
-        OS='Linux_WSL'
-    fi
+# -----------------------------------------------------
+echo -e "${TITLE_COLOR_ESCAPE}   Install pre requirements    ${ESC}[m"
+# -----------------------------------------------------
+if [ $OS = 'Linux' ];then
+    sudo apt update
+    LINUX_PRE_REQUIREMENTS=(curl unzip)
+    for req in "${LINUX_PRE_REQUIREMENTS[@]}";do
+        type "$req" > /dev/null 2>&1 || sudo apt install "$req"
+        echo "$req"
+    done
 fi
 
-# UI ------------------------------------------
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install Fonts?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+test $answer -eq 0 && ${SCRIPT_PATH}install_font.sh ${HACKGEN_VER}
+
+
 if [ $OS = 'Linux' ];then
-    mkdir -p ~/.local/share/fonts
-    cd ~/.local/share/fonts
-    hackgen_ver="v2.5.1"
-    curl -OL https://github.com/yuru7/HackGen/releases/download/${hackgen_ver}/HackGenNerd_${hackgen_ver}.zip
-    unzip -o HackGenNerd_${hackgen_ver}.zip
-    rm -rf HackGenNerd_${hackgen_ver}.zip
-    fc-cache -f -v
 
     sudo apt install exa
 
 elif [ $OS = 'Mac' ];then
 
     echo "You need install exa (https://the.exa.website/)"
-
 
 fi
 
