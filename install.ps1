@@ -2,7 +2,8 @@
 ###########################################
 
 $INSTALLER_VERSION='v0.1.0'
-$SCRIPT_PATH = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "scripts"
+$MY_PATH = Split-Path -Parent $MyInvocation.MyCommand.Path
+$SCRIPT_PATH = Join-Path $MY_PATH "scripts"
 $ESC = [char]27
 $TITLE_COLOR_ESCAPE="$ESC[48;2;52;148;230m$ESC[38;2;255;255;255m"
 $HACKGEN_VER="v2.5.3"
@@ -38,8 +39,18 @@ if ($?) {
 if ($?) {
     winget install vim.vim
     winget install Git.Git
+    PowerShellGet\Install-Module posh-git -Scope CurrentUser -Force
     winget install Microsoft.VisualStudioCode.Insiders
 }
+
+# -----------------------------------------------------
+. "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install PowerShell Profile ?    $ESC[m"
+# -----------------------------------------------------
+if ($?) {
+    $profilePath = Join-Path $MY_PATH 'Microsoft.PowerShell_profile.ps1'
+    Copy-Item -Path $profilePath -Destination $PROFILE
+}
+
 
 # -----------------------------------------------------
 # TODO
