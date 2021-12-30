@@ -51,6 +51,14 @@ if ($?) {
     Copy-Item -Path $profilePath -Destination $PROFILE
 }
 
+# -----------------------------------------------------
+. "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install Windows Terminal Settings ?    $ESC[m"
+# -----------------------------------------------------
+if ($?) {
+    $profilePath = Join-Path $MY_PATH 'windows_terminal_settings.json'
+    Copy-Item -Path $profilePath -Destination "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+}
+
 
 # -----------------------------------------------------
 # TODO
