@@ -55,13 +55,18 @@ if ($?) {
 . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install Windows Terminal Settings ?    $ESC[m"
 # -----------------------------------------------------
 if ($?) {
-    $profilePath = Join-Path $MY_PATH 'windows_terminal_settings.json'
-    Copy-Item -Path $profilePath -Destination "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+    $settingPath = Join-Path $MY_PATH 'windows_terminal_settings.json'
+    Copy-Item -Path $settingPath -Destination "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 }
 
-
 # -----------------------------------------------------
-# TODO
+. "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install vimrc ?    $ESC[m"
 # -----------------------------------------------------
-# vimconfig
-# vscode config
+if ($?) {
+    $vimrcPath = Join-Path $MY_PATH '.vimrc'
+    Copy-Item -Path $vimrcPath -Destination "$env:USERPROFILE\.vimrc"
+    $vimPath = Join-Path $MY_PATH '.vim'
+    Copy-Item $vimPath -Recurse "$env:USERPROFILE\vimfiles"
+    $gvimrcPath = Join-Path $MY_PATH '_gvimrc'
+    Copy-Item -Path $gvimrcPath -Destination "$env:USERPROFILE\_gvimrc"
+}
