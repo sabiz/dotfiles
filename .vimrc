@@ -60,7 +60,7 @@ if has('win32')
   let g:vim_home_runtime_path=expand('~/vimfiles')
 endif
 
-let g:vim_home_runtime_conf_path = g:vim_home_runtime_path.'/conf'
+let g:vim_home_runtime_conf_path = expand(g:vim_home_runtime_path.'/conf')
 
 let s:configurationFiles = [
       \'key.vim',
@@ -69,8 +69,9 @@ let s:configurationFiles = [
       \'loader.vim'
       \]
 for c in s:configurationFiles
-  if filereadable(g:vim_home_runtime_conf_path.'/'.c)
-    execute('source '.g:vim_home_runtime_conf_path.'/'.c)
+  let s:configFilePath = expand(g:vim_home_runtime_conf_path.'/'.c)
+  if filereadable(s:configFilePath)
+    execute('source '.s:configFilePath)
   endif
 endfor
 

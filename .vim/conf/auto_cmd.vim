@@ -14,6 +14,6 @@ augroup END
 
 autocmd BufRead,BufNewFile *.svelte set filetype=svelte
 
-execute('autocmd VimEnter * helptags'.g:vim_home_runtime_path.'/doc')
+execute('autocmd VimEnter * helptags '.expand(g:vim_home_runtime_path.'/doc'))
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:

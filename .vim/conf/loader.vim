@@ -7,7 +7,7 @@ endif
 
 let s:update_plugin = 0
 let s:plugin_path = expand(g:vim_home_runtime_path.'/pack/plugin/start/')
-let s:vim_home_runtime_conf_plugin_path = g:vim_home_runtime_conf_path.'/plugin'
+let s:vim_home_runtime_conf_plugin_path = expand(g:vim_home_runtime_conf_path.'/plugin')
 let s:plugin_names = map(deepcopy(g:plugin_list), {idx, repo-> matchstr(repo, '.\+\/\zs\(\w\|-\)\+\ze')})
 
 function! s:deleteUnUsedPlugin()
@@ -32,7 +32,7 @@ function! s:installAndUpdatePlugin() abort
       let cmd = 'git --git-dir='.clonePath.'/.git pull origin'
       call echoraw("\x1b[33mUpdate:\x1b[0m\t".k."\n")
     else
-      let cmd = 'echo'
+      let cmd = 'git'
     endif
     let job = job_start(cmd, #{in_io: 'null', out_io: 'null', err_io: 'null'})
     call add(job_list, #{name: k, job: job, pos:idx})
@@ -46,7 +46,7 @@ function! s:installAndUpdatePlugin() abort
       let st = job_status(a:val.job)
       if st == 'dead'
         let info = job_info(a:val.job)
-        if info.cmd[0] == 'echo' " ignore
+        if info.cmd[0] == 'git' " ignore
           return 0
         endif
         let exitval = info.exitval
@@ -67,7 +67,7 @@ endfunction
 
 function! s:loadPlugin()
   for k in s:plugin_names
-    let pluginPath = s:plugin_path.k
+    let pluginPath = expand(s:plugin_path.'/'.k)
     if !isdirectory(pluginPath)
       continue
     endif
