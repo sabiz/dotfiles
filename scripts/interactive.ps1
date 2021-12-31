@@ -18,6 +18,10 @@ function draw($select) {
     Write-Host -NoNewline "NO"
 }
 
+function finish($code) {
+    Write-Host ""
+    exit $code
+}
 
 
 Write-Host $Message
@@ -33,9 +37,14 @@ while ($true) {
     switch ($key.Key) {
         "LeftArrow" { $CURRENT = $CURRENT -bxor 1 }
         "RightArrow" { $CURRENT = $CURRENT -bxor 1 }
-        "Enter" {
-            Write-Host ""
-            exit $CURRENT
+        "Enter" { finish $CURRENT }
+        "N" {
+            draw 1
+            finish 1
+        }
+        "Y" {
+            draw 0
+            finish 0
         }
         Default {}
     }
