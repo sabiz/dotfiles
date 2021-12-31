@@ -9,9 +9,11 @@ $ESC = [char]27
 
 $CmdPromptUser = [Security.Principal.WindowsIdentity]::GetCurrent()
 $CmdPromptUserStr = "$($CmdPromptUser.Name.split("\")[1])"
-try {
-    $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin DHCP)[0].IPAddress >${NULL} 2>&1
-} catch {
+
+$IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin DHCP) 2>${NULL}
+if ($IPAddress.length > 0) {
+    $IPAddress = $IPAddress[0].IPAddress
+} else {
     $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin WellKnown)[0].IPAddress
 }
 
