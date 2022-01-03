@@ -6,18 +6,22 @@ Import-Module posh-git
 
 $ESC = [char]27
 
+function Get-IPAddress() {
+    $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin DHCP) 2>${NULL}
+    if ($IPAddress.length -gt 0) {
+        $IPAddress = $IPAddress[0].IPAddress
+    } else {
+        $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin WellKnown)[0].IPAddress
+    }
+    return $IPAddress
+}
 
 $CmdPromptUser = [Security.Principal.WindowsIdentity]::GetCurrent()
 $CmdPromptUserStr = "$($CmdPromptUser.Name.split("\")[1])"
 
-$IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin DHCP) 2>${NULL}
-if ($IPAddress.length > 0) {
-    $IPAddress = $IPAddress[0].IPAddress
-} else {
-    $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin WellKnown)[0].IPAddress
-}
 
-$GitPromptSettings.DefaultPromptPrefix.Text = '$ESC[38;2;102;217;239m$(Get-Date -Format "hh:mm:ss")$ESC[0m - $ESC[38;2;166;226;46m$CmdPromptUserStr@$IPAddress ≫ $pwd$ESC[0m '
+
+$GitPromptSettings.DefaultPromptPrefix.Text = '$ESC[38;2;102;217;239m$(Get-Date -Format "hh:mm:ss")$ESC[0m - $ESC[38;2;166;226;46m$CmdPromptUserStr@$(Get-IPAddress) ≫ $pwd$ESC[0m '
 
 $GitPromptSettings.DefaultPromptPath = ""
 
