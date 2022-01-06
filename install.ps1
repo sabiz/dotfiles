@@ -30,7 +30,7 @@ Write-Host "$ESC[m"
 . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install fonts ?    $ESC[m"
 # -----------------------------------------------------
 if ($?) {
-    . "$SCRIPT_PATH\install_font.ps1"
+    . "$SCRIPT_PATH\install_font.ps1" $HACKGEN_VER
 }
 
 # -----------------------------------------------------
