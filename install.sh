@@ -33,7 +33,7 @@ ${ESC}[m
 # -----------------------------------------------------
 echo -e "${TITLE_COLOR_ESCAPE}   Install pre requirements    ${ESC}[m"
 # -----------------------------------------------------
-if [ $OS = 'Linux' ];then
+if [[ $OS == Linux* ]];then
     sudo apt update
     LINUX_PRE_REQUIREMENTS=(curl unzip)
     for req in "${LINUX_PRE_REQUIREMENTS[@]}";do
@@ -48,45 +48,94 @@ ${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install Fonts?    ${ESC}[m
 answer=$?
 test $answer -eq 0 && ${SCRIPT_PATH}install_font.sh ${HACKGEN_VER}
 
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
 
-if [ $OS = 'Linux' ];then
+    if [[ $OS == Linux* ]];then
 
-    sudo apt install exa
+        sudo apt install exa
 
-elif [ $OS = 'Mac' ];then
+    elif [ $OS = 'Mac' ];then
 
-    echo "You need install exa (https://the.exa.website/)"
+        echo "You need install exa (https://the.exa.website/)"
+
+    fi
 
 fi
 
-# Util ----------------------------------------
-mkdir -p ~/.util
 
-curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
-mv git-completion.bash ~/.util/.
-chmod a+x ~/.util/git-completion.bash
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install util for bash?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+    mkdir -p ~/.util
 
-curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
-mv git-prompt.sh ~/.util/.
-chmod a+x ~/.util/git-prompt.sh
+    echo -e "${TITLE_COLOR_ESCAPE} Install git-completion ${ESC}[m"
+    curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    mv git-completion.bash ~/.util/.
+    chmod a+x ~/.util/git-completion.bash
 
-[[ ! -e ~/.fzf ]] && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+    echo -e "${TITLE_COLOR_ESCAPE} Install git-prompt ${ESC}[m"
+    curl -O https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    mv git-prompt.sh ~/.util/.
+    chmod a+x ~/.util/git-prompt.sh
 
-[[ ! -e ~/.util/enhancd ]] && git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
-
-if [ $OS = 'Mac' ];then
-    [[ ! -e ~/.util/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ~/.util/zsh-completions
-fi
-# copy dotfiles -------------------------------
-if [ $OS = 'Mac' ];then
-    cp ~/dotfiles/.zshrc ~/.zshrc
-else
-    cp ~/dotfiles/.bashrc ~/.bashrc
+    if [ $OS = 'Mac' ];then
+        echo -e "${TITLE_COLOR_ESCAPE} Install zsh-completions ${ESC}[m"
+        [[ ! -e ~/.util/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ~/.util/zsh-completions
+    fi
 fi
 
-cp ~/dotfiles/.vimrc ~/.vimrc
-cp -R ~/dotfiles/.vim ~/.vim
-cp ~/dotfiles/.gitconfig ~/.gitconfig
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install fzf?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+
+    [[ ! -e ~/.fzf ]] && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
+
+fi
+
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install enhancd?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+    [[ ! -e ~/.util/enhancd ]] && git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
+fi
+
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install bashrc/zshrc?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+    if [ $OS = 'Mac' ];then
+        cp $(dirname $0)/.zshrc ~/.zshrc
+    else
+        cp $(dirname $0)/.bashrc ~/.bashrc
+    fi
+fi
+
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install vimrc?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+    cp $(dirname $0)/.vimrc ~/.vimrc
+    cp -R $(dirname $0)/.vim ~/.vim
+fi
+
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install gitconfig?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+    cp $(dirname $0)/.gitconfig ~/.gitconfig
+fi
 
 echo Done.

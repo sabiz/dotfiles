@@ -41,6 +41,14 @@ while true; do
             fi
         fi
         ;;
+    "y") # Yes
+        draw 0
+        echo; exit 0
+        ;;
+    "n") # No
+        draw 1
+        echo; exit 1
+        ;;
     "") # Enter
         echo
         exit $CURRENT
