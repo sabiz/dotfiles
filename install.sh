@@ -35,7 +35,7 @@ echo -e "${TITLE_COLOR_ESCAPE}   Install pre requirements    ${ESC}[m"
 # -----------------------------------------------------
 if [[ $OS == Linux* ]];then
     sudo apt update
-    LINUX_PRE_REQUIREMENTS=(curl unzip)
+    LINUX_PRE_REQUIREMENTS=(curl unzip git)
     for req in "${LINUX_PRE_REQUIREMENTS[@]}";do
         type "$req" > /dev/null 2>&1 || sudo apt install "$req"
         echo "$req"
@@ -64,6 +64,25 @@ if [ $answer -eq 0 ];then
 
     fi
 
+fi
+
+# -----------------------------------------------------
+${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install vim from git?    ${ESC}[m"
+# -----------------------------------------------------
+answer=$?
+if [ $answer -eq 0 ];then
+
+    git clone https://github.com/vim/vim.git ~/vim-tmp --depth 1
+    trap 'cd -;rm -rf ~/vim-tmp' 2
+    if [[ $OS == Linux* ]];then
+        sudo apt install gettext libtinfo-dev libacl1-dev libgpm-dev  build-essential
+    fi
+    cd ~/vim-tmp
+    ./configure --enable-fail-if-missing
+    make -j5
+    sudo make install
+    cd -
+    rm -rf ~/vim-tmp
 fi
 
 
