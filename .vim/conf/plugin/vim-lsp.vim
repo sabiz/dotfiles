@@ -1,3 +1,7 @@
+nmap <Leader>lf <plug>(lsp-document-format)
+nmap <Leader>lh <plug>(lsp-hover)
+
+
 " let g:lsp_log_verbose = 1
 " let g:lsp_log_file = expand('~/vim-lsp.log')
 let g:lsp_async_completion = 1
