@@ -11,6 +11,13 @@ TITLE_COLOR_ESCAPE="${ESC}[48;2;52;148;230m${ESC}[38;2;255;255;255m"
 
 export OS=$(${SCRIPT_PATH}get_os.sh)
 
+if [[ $OS == Linux* ]];then
+    INTERACTIVE_SH="interactive.sh"
+else
+    # for MacOS zsh
+    INTERACTIVE_SH="interactive.zsh"
+fi
+
 ###########################################
 
 echo -e "
@@ -43,13 +50,13 @@ if [[ $OS == Linux* ]];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install Fonts?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install Fonts?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 test $answer -eq 0 && ${SCRIPT_PATH}install_font.sh ${HACKGEN_VER}
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -67,7 +74,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install vim from git?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vim from git?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -87,7 +94,7 @@ fi
 
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install util for bash?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install util for bash?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -110,7 +117,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install fzf?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install fzf?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -121,7 +128,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install enhancd?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install enhancd?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -129,7 +136,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install bashrc/zshrc?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install bashrc/zshrc?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -141,7 +148,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install vimrc?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vimrc?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
@@ -150,7 +157,7 @@ if [ $answer -eq 0 ];then
 fi
 
 # -----------------------------------------------------
-${SCRIPT_PATH}interactive.sh "${TITLE_COLOR_ESCAPE}   Install gitconfig?    ${ESC}[m"
+${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install gitconfig?    ${ESC}[m"
 # -----------------------------------------------------
 answer=$?
 if [ $answer -eq 0 ];then
