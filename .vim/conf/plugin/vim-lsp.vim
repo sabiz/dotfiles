@@ -6,6 +6,7 @@ nmap <Leader>lh <plug>(lsp-hover)
 " let g:lsp_log_file = expand('~/vim-lsp.log')
 let g:lsp_async_completion = 1
 let g:lsp_diagnostics_float_cursor = 1
+let g:lsp_document_code_action_signs_enabled = 0
 autocmd User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
       \ 'name': 'file',
       \ 'whitelist': ['*'],
