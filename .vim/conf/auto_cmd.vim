@@ -13,6 +13,7 @@ augroup molokaiTablineScheme
 augroup END
 
 autocmd BufRead,BufNewFile *.svelte set filetype=svelte
+autocmd BufRead,BufNewFile *.tf set filetype=terraform
 
 execute('autocmd VimEnter * helptags '.expand(g:vim_home_runtime_path.'/doc'))
 
