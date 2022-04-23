@@ -6,6 +6,7 @@ Import-Module ~/app/posh-git/src/posh-git.psd1
 
 function ReloadEnv() {
     $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+    $Env:PATH="C:\Program Files\Vim\vim82;$Env:PATH"
 }
 
 function Get-IPAddress() {
@@ -31,4 +32,4 @@ $GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
 
 $GitPromptSettings.DefaultPromptSuffix = '$ESC[38;2;249;38;114m$(if ($IsAdmin){" # "}else{" $ "})$ESC[48;2;102;217;239m $ESC[0m$ESC[38;2;102;217;239m '
 
-$Env:PATH="C:\Program Files\Vim\vim82;$Env:PATH"
+ReloadEnv
