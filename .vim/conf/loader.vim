@@ -86,17 +86,116 @@ function! s:loadPlugin()
   endfor
 endfunction
 
-function! s:load() abort
-
-  if !isdirectory(s:plugin_path)
-    call mkdir(s:plugin_path, 'p')
-  endif
-
+function! s:loadImplOld() abort
   call s:deleteUnUsedPlugin()
 
   call s:installAndUpdatePlugin()
 
   call s:loadPlugin()
+endfunction
+
+def! DeleteUnUsedPlugin()
+  var dirList = split(glob(s:plugin_path .. "*"), "\n")
+  for d in dirList
+   if match(s:plugin_names, fnamemodify(d, ":t")) == -1
+     delete(expand(d), "rf")
+     echoraw("\x1b[94mDelete: " .. fnamemodify(d, ':t') .. "\x1b[0m")
+     echoraw("\n")
+   endif
+  endfor
+enddef
+
+def! InstallAndUpdatePlugin()
+  var job_list = []
+  var idx = 0
+  for k in s:plugin_names
+    var clonePath = s:plugin_path .. k
+    var cmd = ''
+    if !isdirectory(clonePath)
+      cmd = 'git ' .. 'clone https://github.com/' .. g:plugin_list[idx] .. ' ' .. clonePath
+      echoraw("\x1b[33mNew: " .. k .. "\x1b[0m")
+      echoraw("\n")
+      sleep 200m
+    elseif s:update_plugin
+      cmd = 'git --git-dir=' .. clonePath .. '/.git pull origin'
+      echoraw("\x1b[33mUpdate: " .. k ..  "\x1b[0m")
+      echoraw("\n")
+      sleep 200m
+    else
+      continue
+    endif
+    var job = job_start(cmd, {'in_io': 'null', 'out_io': 'null', 'err_io': 'null'})
+    add(job_list, {'name': k, 'job': job, 'pos': idx})
+    idx += 1
+  endfor
+  echoraw("\x1b[s") # Save cursor pos
+
+  # Wait jobs
+  while empty(job_list) == 0
+    filter(job_list, (i, value) => {
+      var st = job_status(value.job)
+      if st == 'dead'
+        var info = job_info(value.job)
+        if info.cmd[0] == 'git' # ignore
+          return false
+        endif
+        var exitval = info.exitval
+        echoraw("\x1b[u\x1b[" .. value.pos .. "A") # Restore cursor pos & Move cursor
+        if exitval == 0
+          echoraw("\x1b[34mSuccess: " .. value.name .. "\x1b[0m")
+          echoraw("\n")
+        else
+          echoraw("\x1b[31mFailed: " .. value.name .. "\x1b[0m")
+          echoraw("\n")
+          echon " "
+        endif
+      endif
+      return st !=# 'dead'
+    })
+  endwhile
+enddef
+
+def! LoadPlugin()
+  for k in s:plugin_names
+    var pluginPath = expand(s:plugin_path .. '/' .. k)
+    if !isdirectory(pluginPath)
+      continue
+    endif
+
+    # Load plugin help
+    var docPath = pluginPath .. '/doc'
+    if isdirectory(docPath)
+      execute('autocmd vimenter * helptags ' .. expand(docPath))
+    endif
+
+    # Load plugin config
+    var confFilePath = s:vim_home_runtime_conf_plugin_path .. '/' .. k .. '.vim'
+    if filereadable(confFilePath)
+      execute('source ' .. confFilePath)
+    endif
+  endfor
+enddef
+
+def! LoadImpl()
+
+  g:DeleteUnUsedPlugin()
+
+  g:InstallAndUpdatePlugin()
+
+  g:LoadPlugin()
+
+enddef
+
+function! s:load() abort
+  if !isdirectory(s:plugin_path)
+    call mkdir(s:plugin_path, 'p')
+  endif
+
+  if v:version >= 900
+    call LoadImpl()
+  else
+    call s:loadImpl()
+  endif
 
 endfunction
 
