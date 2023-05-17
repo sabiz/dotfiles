@@ -86,7 +86,7 @@ function! s:loadPlugin()
   endfor
 endfunction
 
-function! s:loadImplOld() abort
+function! s:loadImpl() abort
   call s:deleteUnUsedPlugin()
 
   call s:installAndUpdatePlugin()
