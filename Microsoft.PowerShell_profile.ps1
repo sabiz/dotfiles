@@ -2,7 +2,8 @@ Set-PSReadLineOption -PredictionSource History
 Set-PSReadlineOption -HistoryNoDuplicates
 Set-PSReadlineOption -BellStyle None
 
-Import-Module ~/app/posh-git/src/posh-git.psd1
+# Import-Module ~/app/posh-git/src/posh-git.psd1
+Import-Module posh-git
 
 function ReloadEnv() {
     $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
