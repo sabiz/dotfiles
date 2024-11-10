@@ -11,7 +11,7 @@ let g:plugin_list = [
       \'majutsushi/tagbar',
       \'mattn/vim-lsp-settings',
       \'mattn/vim-molder',
-      \'mattn/vim-molder-operations'
+      \'mattn/vim-molder-operations',
       \'mechatroner/rainbow_csv.git',
       \'mileszs/ack.vim.git',
       \'prabirshrestha/async.vim.git',

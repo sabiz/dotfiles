@@ -122,7 +122,7 @@ def! InstallAndUpdatePlugin()
       echoraw("\n")
       sleep 200m
     else
-      continue
+      cmd = 'git'
     endif
     var job = job_start(cmd, {'in_io': 'null', 'out_io': 'null', 'err_io': 'null'})
     add(job_list, {'name': k, 'job': job, 'pos': idx})
