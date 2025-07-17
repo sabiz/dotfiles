@@ -2,14 +2,29 @@ Set-PSReadLineOption -PredictionSource History
 Set-PSReadlineOption -HistoryNoDuplicates
 Set-PSReadlineOption -BellStyle None
 
-# Import-Module ~/app/posh-git/src/posh-git.psd1
-Import-Module posh-git
-
+###################################################################
+# Reload the environment variables and paths
+###################################################################
 function ReloadEnv() {
     $Env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-    $Env:PATH="C:\Program Files\Vim\vim82;$Env:PATH"
+
+    $pathListFilePath = (Join-Path ([Environment]::GetFolderPath([Environment+SpecialFolder]::MyDocuments)) PowerShell path_list.txt)
+    if (Test-Path $pathListFilePath) {
+        $pathList = Get-Content $pathListFilePath
+        foreach ($path in $pathList) {
+            if ($path -and (Test-Path $path)) {
+                $Env:Path += ";$path"
+            }
+        }
+    } else {
+        Write-Host "Path list file not found: $pathListFilePath"
+        New-Item -Path $pathListFilePath -ItemType File -Force | Out-Null
+    }
 }
 
+###################################################################
+# Get the current IP address of the machine
+###################################################################
 function Get-IPAddress() {
     $IPAddress = (Get-NetIPAddress -AddressFamily IPv4 -AddressState Preferred -SuffixOrigin DHCP) 2>${NULL}
     if ($IPAddress.length -gt 0) {
@@ -19,6 +34,17 @@ function Get-IPAddress() {
     }
     return $IPAddress
 }
+
+#################################################################
+#################################################################
+
+
+if (-not (Get-Module -ListAvailable -Name posh-git)) {
+    Write-Host "posh-git module not found. Installing..."
+    Install-Module posh-git -Scope CurrentUser -Force
+}
+
+Import-Module posh-git
 
 $ESC = [char]27
 
