@@ -3,11 +3,12 @@
 ###########################################
 ###########################################
 
-INSTALLER_VERSION='v0.6.0'
+INSTALLER_VERSION='v0.8.0'
 ESC=$(printf '\033')
 SCRIPT_PATH=$(dirname $0)/scripts/
 HACKGEN_VER="v2.5.3"
 TITLE_COLOR_ESCAPE="${ESC}[48;2;52;148;230m${ESC}[38;2;255;255;255m"
+SKIP_AKS=1
 
 export OS=$(${SCRIPT_PATH}get_os.sh)
 
@@ -37,48 +38,63 @@ ${ESC}[38;2;236;110;173m  ╚═╝╚═╝  ╚═══╝╚═════�
 ${ESC}[m
 "
 
-# -----------------------------------------------------
-echo -e "${TITLE_COLOR_ESCAPE}   Install pre requirements    ${ESC}[m"
-# -----------------------------------------------------
-if [[ $OS == Linux* ]];then
-    sudo apt update
-    LINUX_PRE_REQUIREMENTS=(curl unzip git)
-    for req in "${LINUX_PRE_REQUIREMENTS[@]}";do
-        type "$req" > /dev/null 2>&1 || sudo apt install "$req"
-        echo "$req"
-    done
-fi
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install Fonts?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-test $answer -eq 0 && ${SCRIPT_PATH}install_font.sh ${HACKGEN_VER}
-
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
-
-    if [[ $OS == Linux* ]];then
-
-        sudo apt install exa
-
-    elif [ $OS = 'Mac' ];then
-
-        echo "You need install exa (https://the.exa.website/)"
-
+function installPreRequirements () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install pre requirements?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
     fi
+    if [[ $OS == Linux* ]];then
+        sudo apt update
+        LINUX_PRE_REQUIREMENTS=(curl unzip git)
+        for req in "${LINUX_PRE_REQUIREMENTS[@]}";do
+            type "$req" > /dev/null 2>&1 || sudo apt install "$req"
+            echo "$req"
+        done
+    fi
+    echo "${TITLE_COLOR_ESCAPE} pre requirements install done. ${ESC}[m"
 
-fi
+}
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vim from git?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installFonts () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install HackGen Fonts?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
+    ${SCRIPT_PATH}install_font.sh ${HACKGEN_VER}
+    echo "${TITLE_COLOR_ESCAPE} font install done. ${ESC}[m"
+}
 
+function installExa () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
+    if [[ $OS == Linux* ]];then
+        sudo apt install exa
+    elif [ $OS = 'Mac' ];then
+        echo "You need install exa (https://the.exa.website/)"
+    fi
+    echo "${TITLE_COLOR_ESCAPE} exa install done. ${ESC}[m"
+}
+
+function installVim () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vim?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     git clone https://github.com/vim/vim.git ~/vim-tmp --depth 1
     trap 'cd -;rm -rf ~/vim-tmp' 2
     if [[ $OS == Linux* ]];then
@@ -90,14 +106,17 @@ if [ $answer -eq 0 ];then
     sudo make install
     cd -
     rm -rf ~/vim-tmp
-fi
+    echo "${TITLE_COLOR_ESCAPE} vim install done. ${ESC}[m"
+}
 
-
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install util for bash?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installUtil () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install util for bash?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     mkdir -p ~/.util
 
     echo -e "${TITLE_COLOR_ESCAPE} Install git-completion ${ESC}[m"
@@ -114,54 +133,131 @@ if [ $answer -eq 0 ];then
         echo -e "${TITLE_COLOR_ESCAPE} Install zsh-completions ${ESC}[m"
         [[ ! -e ~/.util/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ~/.util/zsh-completions
     fi
-fi
+    echo "${TITLE_COLOR_ESCAPE} util install done. ${ESC}[m"
+}
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install fzf?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
-
+function installFzf () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install fzf?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     [[ ! -e ~/.fzf ]] && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
     ~/.fzf/install
+    echo "${TITLE_COLOR_ESCAPE} fzf install done. ${ESC}[m"
+}
 
-fi
-
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install enhancd?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installEnhancd () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install enhancd?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     [[ ! -e ~/.util/enhancd ]] && git clone https://github.com/b4b4r07/enhancd ~/.util/enhancd
-fi
+    echo "${TITLE_COLOR_ESCAPE} enhancd install done. ${ESC}[m"
+}
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install bashrc/zshrc?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installBashrc () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install bashrc/zshrc?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     if [ $OS = 'Mac' ];then
         cp $(dirname $0)/.zshrc ~/.zshrc
     else
+        curl -sS https://starship.rs/install.sh | sh
+        mkdir -p ~/.config
+        cp $(dirname $0)/starship.toml ~/.config/starship.toml
         cp $(dirname $0)/.bashrc ~/.bashrc
     fi
-fi
+    echo "${TITLE_COLOR_ESCAPE} bashrc/zshrc install done. ${ESC}[m"
+}
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vimrc?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installVimrc () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install vimrc?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     cp $(dirname $0)/.vimrc ~/.vimrc
     cp -R $(dirname $0)/.vim ~/.vim
-fi
+    echo "${TITLE_COLOR_ESCAPE} vimrc install done. ${ESC}[m"
+}
 
-# -----------------------------------------------------
-${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install gitconfig?    ${ESC}[m"
-# -----------------------------------------------------
-answer=$?
-if [ $answer -eq 0 ];then
+function installGitConfig () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install gitconfig?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
     cp $(dirname $0)/.gitconfig ~/.gitconfig
-fi
+    echo "${TITLE_COLOR_ESCAPE} gitconfig install done. ${ESC}[m"
+}
 
-echo Done.
+if [ $# -eq 0 ];then
+    installPreRequirements 0
+    installFonts 0
+    installExa 0
+    installVim 0
+    installUtil 0
+    installFzf 0
+    installEnhancd 0
+    installBashrc 0
+    installVimrc 0
+    installGitConfig 0
+else
+    for arg in "$@"; do
+        case $arg in
+            --pre-requirements)
+                installPreRequirements $SKIP_AKS
+                ;;
+            --fonts)
+                installFonts $SKIP_AKS
+                ;;
+            --exa)
+                installExa $SKIP_AKS
+                ;;
+            --vim)
+                installVim $SKIP_AKS
+                ;;
+            --util)
+                installUtil $SKIP_AKS
+                ;;
+            --fzf)
+                installFzf $SKIP_AKS
+                ;;
+            --enhancd)
+                installEnhancd $SKIP_AKS
+                ;;
+            --bashrc)
+                installBashrc $SKIP_AKS
+                ;;
+            --vimrc)
+                installVimrc $SKIP_AKS
+                ;;
+            --gitconfig)
+                installGitConfig $SKIP_AKS
+                ;;
+            --help)
+                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa] [--vim] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--gitconfig]"
+                exit 0
+                ;;
+            *)
+                echo "Unknown option: $arg"
+                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa] [--vim] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--gitconfig]"
+                exit 1
+                ;;
+        esac
+    done
+fi

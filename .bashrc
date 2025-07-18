@@ -85,3 +85,4 @@ cdAndLs(){
 
 alias cd=cdAndLs
 
+eval "$(starship init bash)"
