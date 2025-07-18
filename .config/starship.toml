@@ -1,0 +1,358 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+right_format = ''
+add_newline = true
+follow_symlinks = false
+format = """
+[$time](bg:#2A5470)\
+[ ](bg:#2E5271)\
+[-](bg:#325072)\
+[ ](bg:#354E72)\
+[$username](bg:#394C73)\
+[@](bg:#3D4974)\
+[$localip](bg:#414775)\
+[ ](bg:#444575)\
+[≫ ](bg:#484376)\
+[$directory](bg:#4C4177)\
+[](fg:#4C4177)\
+$fill\
+[$git_branch](fg:#4C4177)\
+[$git_commit](fg:#444675)\
+[$git_state](fg:#3B4B74)\
+[$git_metrics](fg:#334F72)\
+[$git_status](fg:#2A5470)\
+$line_break\
+$status\
+$sudo\
+$character"""
+
+[time]
+disabled = false
+style = 'none'
+format = '[$time]($style)'
+
+[character]
+success_symbol = '[ ❯](bold fg:#00A550)'
+error_symbol = '[ ❯](bold fg:#B542B4)'
+format = '$symbol '
+
+
+[username]
+disabled = false
+show_always = true
+style_user = 'none'
+style_root = 'bold'
+format = '[$user]($style)'
+
+[localip]
+disabled = false
+ssh_only = false
+style = 'none'
+format = '[$localipv4]($style)'
+
+[directory]
+disabled = false
+truncation_length = 10000
+truncate_to_repo = false
+truncation_symbol = '…'
+format = '[$path](none)'
+use_os_path_sep = true
+
+[git_branch]
+disabled = false
+style = 'none'
+symbol = ''
+format = '[$symbol$branch(:$remote_branch)]($style)'
+
+[git_commit]
+disabled = false
+style = 'none'
+format = '[$symbol$hash]($style)'
+
+[git_state]
+disabled = false
+style = 'none'
+format = '\([$state( $progress_current/$progress_total)]($style)\)'
+
+[git_metrics]
+disabled = false
+added_style = 'none'
+deleted_style = 'none'
+format = '\[([+$added]($added_style))([-$deleted]($deleted_style))\]'
+
+[git_status]
+disabled = false
+style = 'none'
+format = '([\[$all_status$ahead_behind\]]($style))'
+
+[line_break]
+disabled = false
+
+[status]
+disabled = false
+format = '[$symbol $status]($style)'
+
+[sudo]
+disabled = false
+format = '[$symbol]($style) '
+
+[fill]
+disabled = false
+symbol = ' '
+
+################################################################
+# Disabled modules
+################################################################
+
+[custom]
+disabled = true
+
+[aws]
+disabled = true
+
+[azure]
+disabled = true
+
+[battery]
+disabled = true
+
+[buf]
+disabled = true
+
+[bun]
+disabled = true
+
+[c]
+disabled = true
+
+[cpp]
+disabled = true
+
+[cmake]
+disabled = true
+
+[cobol]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
+[conda]
+disabled = true
+
+[container]
+disabled = true
+
+[crystal]
+disabled = true
+
+[daml]
+disabled = true
+
+[dart]
+disabled = true
+
+[deno]
+disabled = true
+
+[direnv]
+disabled = true
+
+[docker_context]
+disabled = true
+
+[dotnet]
+disabled = true
+
+[elixir]
+disabled = true
+
+[elm]
+disabled = true
+
+[env_var]
+disabled = true
+
+[erlang]
+disabled = true
+
+[fennel]
+disabled = true
+
+[fossil_branch]
+disabled = true
+
+[fossil_metrics]
+disabled = true
+
+[gcloud]
+disabled = true
+
+[gleam]
+disabled = true
+
+[golang]
+disabled = true
+
+[guix_shell]
+disabled = true
+
+[gradle]
+disabled = true
+
+[haskell]
+disabled = true
+
+[haxe]
+disabled = true
+
+[helm]
+disabled = true
+
+[hostname]
+disabled = true
+
+[java]
+disabled = true
+
+[jobs]
+disabled = true
+
+[julia]
+disabled = true
+
+[kotlin]
+disabled = true
+
+[kubernetes]
+disabled = true
+
+[lua]
+disabled = true
+
+[memory_usage]
+disabled = true
+
+[meson]
+disabled = true
+
+[hg_branch]
+disabled = true
+
+[mise]
+disabled = true
+
+[mojo]
+disabled = true
+
+[nats]
+disabled = true
+
+[netns]
+disabled = true
+
+[nim]
+disabled = true
+
+[nix_shell]
+disabled = true
+
+[nodejs]
+disabled = true
+
+[ocaml]
+disabled = true
+
+[odin]
+disabled = true
+
+[opa]
+disabled = true
+
+[openstack]
+disabled = true
+
+[os]
+disabled = true
+
+[package]
+disabled = true
+
+[perl]
+disabled = true
+
+[php]
+disabled = true
+
+[pijul_channel]
+disabled = true
+
+[pixi]
+disabled = true
+
+[pulumi]
+disabled = true
+
+[purescript]
+disabled = true
+
+[python]
+disabled = true
+
+[quarto]
+disabled = true
+
+[rlang]
+disabled = true
+
+[raku]
+disabled = true
+
+[red]
+disabled = true
+
+[ruby]
+disabled = true
+
+[rust]
+disabled = true
+
+[scala]
+disabled = true
+
+[shell]
+disabled = true
+
+[shlvl]
+disabled = true
+
+[singularity]
+disabled = true
+
+[solidity]
+disabled = true
+
+[spack]
+disabled = true
+
+[swift]
+disable = true
+
+[terraform]
+disabled = true
+
+[typst]
+disabled = true
+
+[vagrant]
+disabled = true
+
+[vlang]
+disabled = true
+
+[vcsh]
+disabled = true
+
+[zig]
+disabled = true
+

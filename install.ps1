@@ -71,6 +71,8 @@ function Install-PowerShell-Profile {
     if ($? -or -not $isInstaractive) {
         $profilePath = Join-Path $MY_PATH 'Microsoft.PowerShell_profile.ps1'
         Copy-Item -Path $profilePath -Destination $PROFILE
+        $configPath = Join-Path $MY_PATH '.config'
+        Copy-Item -Path $configPath -Recurse -Force -Destination "$env:USERPROFILE"
     }
 }
 

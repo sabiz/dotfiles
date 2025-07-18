@@ -38,25 +38,10 @@ function Get-IPAddress() {
 #################################################################
 #################################################################
 
-
-if (-not (Get-Module -ListAvailable -Name posh-git)) {
-    Write-Host "posh-git module not found. Installing..."
-    Install-Module posh-git -Scope CurrentUser -Force
+if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
+    winget install --id Starship.Starship
 }
 
-Import-Module posh-git
-
-$ESC = [char]27
-
-$CmdPromptUser = [Security.Principal.WindowsIdentity]::GetCurrent()
-$CmdPromptUserStr = "$($CmdPromptUser.Name.split("\")[1])"
-
-$GitPromptSettings.DefaultPromptPrefix.Text = '$ESC[38;2;102;217;239m$(Get-Date -Format "hh:mm:ss")$ESC[0m - $ESC[38;2;166;226;46m$CmdPromptUserStr@$(Get-IPAddress) ≫ $pwd$ESC[0m '
-
-$GitPromptSettings.DefaultPromptPath = ""
-
-$GitPromptSettings.DefaultPromptBeforeSuffix.Text = '`n'
-
-$GitPromptSettings.DefaultPromptSuffix = '$ESC[38;2;249;38;114m$(if ($IsAdmin){" # "}else{" $ "})$ESC[48;2;102;217;239m $ESC[0m$ESC[38;2;102;217;239m '
+Invoke-Expression (&starship init powershell)
 
 ReloadEnv
