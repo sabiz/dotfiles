@@ -4,6 +4,7 @@ right_format = ''
 add_newline = true
 follow_symlinks = false
 format = """
+[](fg:#2A5470)\
 [$time](bg:#2A5470)\
 [ ](bg:#2E5271)\
 [-](bg:#325072)\
@@ -12,9 +13,9 @@ format = """
 [@](bg:#3D4974)\
 [$localip](bg:#414775)\
 [ ](bg:#444575)\
-[≫ ](bg:#484376)\
+[》](bg:#484376)\
 [$directory](bg:#4C4177)\
-[](fg:#4C4177)\
+[](fg:#4C4177)\
 $fill\
 [$git_branch](fg:#4C4177)\
 [$git_commit](fg:#444675)\
@@ -83,7 +84,7 @@ format = '\[([+$added]($added_style))([-$deleted]($deleted_style))\]'
 [git_status]
 disabled = false
 style = 'none'
-format = '([\[$all_status$ahead_behind\]]($style))'
+format = '([$all_status$ahead_behind]($style))'
 
 [line_break]
 disabled = false
