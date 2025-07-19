@@ -38,10 +38,10 @@ function Get-IPAddress() {
 #################################################################
 #################################################################
 
+ReloadEnv
+
 if (-not (Get-Command starship -ErrorAction SilentlyContinue)) {
     winget install --id Starship.Starship
 }
 
 Invoke-Expression (&starship init powershell)
-
-ReloadEnv
