@@ -23,8 +23,6 @@ $fill\
 [$git_metrics](fg:#334F72)\
 [$git_status](fg:#2A5470)\
 $line_break\
-$status\
-$sudo\
 $character"""
 
 [time]
@@ -88,14 +86,6 @@ format = '([$all_status$ahead_behind]($style))'
 
 [line_break]
 disabled = false
-
-[status]
-disabled = false
-format = '[$symbol $status]($style)'
-
-[sudo]
-disabled = false
-format = '[$symbol]($style) '
 
 [fill]
 disabled = false
@@ -334,6 +324,12 @@ disabled = true
 disabled = true
 
 [spack]
+disabled = true
+
+[status]
+disabled = true
+
+[sudo]
 disabled = true
 
 [swift]
