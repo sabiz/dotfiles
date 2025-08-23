@@ -55,6 +55,11 @@ function Install-Development-Tools {
         winget install vim.vim
         winget install Git.Git
         winget install Microsoft.VisualStudioCode.Insiders
+        winget install BurntSushi.ripgrep.MSVC
+        winget install zig.zig
+        winget install Neovim.Neovim
+        winget install Neovide.Neovide
+
     }
 }
 
@@ -112,6 +117,28 @@ function Install-Vimrc {
     }
 }
 
+# ------------------------------------------------------
+# Install Neovim Settings
+# ------------------------------------------------------
+function Install-Neovim-Settings {
+    param($isInstaractive = $true)
+    if ($isInstaractive) {
+        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install Neovim settings ?    $ESC[m"
+    } else {
+        Write-Host "$TITLE_COLOR_ESCAPE   Install Neovim settings.    $ESC[m"
+    }
+    if ($? -or -not $isInstaractive) {
+        $nvimSource = Join-Path $MY_PATH 'nvim'
+        $nvimDest = "$env:USERPROFILE\AppData\Local\nvim"
+        if (Test-Path $nvimDest) {
+            $backupPath = "$nvimDest.backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+            Write-Host "$TITLE_COLOR_ESCAPE   Existing nvim folder detected. Backing up to $backupPath    $ESC[m"
+            Rename-Item -Path $nvimDest -NewName $backupPath
+        }
+        Copy-Item -Path $nvimSource -Recurse -Force -Destination $nvimDest
+    }
+}
+
 
 if ($args.Count -eq 0) {
     Install-Fonts
@@ -119,6 +146,7 @@ if ($args.Count -eq 0) {
     Install-PowerShell-Profile
     Install-Windows-Terminal-Settings
     Install-Vimrc
+    Install-Neovim-Settings
 } else {
     foreach ($arg in $args) {
         switch ($arg) {
@@ -127,9 +155,10 @@ if ($args.Count -eq 0) {
             'profile' { Install-PowerShell-Profile $false }
             'terminal' { Install-Windows-Terminal-Settings $false }
             'vimrc' { Install-Vimrc $false }
+            'nvim' { Install-Neovim-Settings $false }
             default { Write-Host "Unknown argument: $arg"
                       Write-Host "Usage: install.ps1 {options...}"
-                      Write-Host "Available options: fonts, devtools, profile, terminal, vimrc" }
+                      Write-Host "Available options: fonts, devtools, profile, terminal, vimrc, nvim" }
         }
     }
 }
