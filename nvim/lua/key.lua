@@ -1,14 +1,10 @@
 vim.g.mapleader = " "
 
-vim.keymap.set("i", "jj", "<ESC>", {silent=true})
+vim.keymap.set("i", "jj", "<ESC>", {silent=true, desc="Exit insert mode"})
 
-local nopts = {noremap = true, silent = true}
-vim.keymap.set("n", "<Leader><Right>", ":bnext<CR>", nopts)
--- vim.keymap.set("n", "<Leader><Right>", ":tabnext<CR>", nopts)
-vim.keymap.set("n", "<Leader><Left>", ":bprevious<CR>", nopts)
--- vim.keymap.set("n", "<Leader><Left>", ":tabprevious<CR>", nopts)
-vim.keymap.set("n", "<Leader><Down>", ":bdelete<CR>", nopts)
--- vim.keymap.set("n", "<Leader><Down>", ":tabclose<CR>", nopts)
+vim.keymap.set("n", "<Leader><Right>", ":bnext<CR>", {noremap = true, silent = true, desc="Next buffer"})
+vim.keymap.set("n", "<Leader><Left>", ":bprevious<CR>", {noremap = true, silent = true, desc="Previous buffer"})
+vim.keymap.set("n", "<Leader><Down>", ":bdelete<CR>", {noremap = true, silent = true, desc="Close buffer"})
 
 local function open_terminal()
   local shell_cmd
@@ -29,8 +25,10 @@ local function open_terminal()
   vim.cmd("terminal " .. shell_cmd)
 
 end
-vim.keymap.set("n", "<leader>sh", open_terminal, nopts)
-vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-w>h]], nopts)
-vim.keymap.set("t", "<C-j>", [[<C-\><C-n><C-w>j]], nopts)
-vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-w>k]], nopts)
-vim.keymap.set("t", "<C-l>", [[<C-\><C-n><C-w>l]], nopts)
+vim.keymap.set("n", "<leader>sh", open_terminal, {noremap = true, silent = true, desc="Open terminal"})
+vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {noremap = true, silent = true, desc="Terminal: Escape to normal mode"})
+vim.keymap.set("t", "<C-Left>", [[<C-\><C-n><C-w>h]], {noremap = true, silent = true, desc="Move to left window"})
+vim.keymap.set("t", "<C-Down>", [[<C-\><C-n><C-w>j]], {noremap = true, silent = true, desc="Move to lower window"})
+vim.keymap.set("t", "<C-Up>", [[<C-\><C-n><C-w>k]], {noremap = true, silent = true, desc="Move to upper window"})
+vim.keymap.set("t", "<C-Right>", [[<C-\><C-n><C-w>l]], {noremap = true, silent = true, desc="Move to right window"})
+

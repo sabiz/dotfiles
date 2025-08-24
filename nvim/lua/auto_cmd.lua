@@ -12,5 +12,3 @@ vim.api.nvim_create_autocmd({ "VimEnter", "WinEnter" }, {
   end,
 })
 
-
--- execute('autocmd VimEnter * helptags '.expand(g:vim_home_runtime_path.'/doc'))

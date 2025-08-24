@@ -40,5 +40,6 @@ return {
             }
         })
         vim.keymap.set("n", "<Leader>cc", ":CodeCompanionChat<CR>", { desc = "CodeCompanion Chat" })
+        vim.keymap.set("n", "<Leader>ca", ":CodeCompanionActions<CR>", { desc = "CodeCompanion Actions" })
     end,
 }

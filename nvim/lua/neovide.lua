@@ -3,7 +3,7 @@ if (not vim.g.neovide) then
 end
 
 vim.opt.mouse = "a"
-vim.opt.guifont="HackGenNerd_Console:h14:cSHIFTJIS:qDRAFT"
+vim.opt.guifont="HackGen Console NF:h14:cSHIFTJIS:qDRAFT"
 vim.g.neovide_cursor_vfx_mode = {"pixiedust"}
 
 -- Zoom in/out

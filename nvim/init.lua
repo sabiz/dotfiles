@@ -50,7 +50,7 @@ vim.opt.showmode = false
 
 -- Commandline ----------------------------------
 vim.opt.wildmenu = true
-vim.opt.cmdheight = 2
+vim.opt.cmdheight = 1
 vim.opt.showcmd = true
 vim.opt.history = 1000
 vim.opt.ttyfast = true
