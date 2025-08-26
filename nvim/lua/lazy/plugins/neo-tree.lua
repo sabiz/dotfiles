@@ -10,6 +10,12 @@ return {
     lazy = false,
     config = function()
       require("neo-tree").setup({
+          filesystem = {
+            filtered_items = {
+              hide_dotfiles = false,
+              hide_gitignored = false,
+            },
+          },
       })
       vim.keymap.set("n", "<Leader>f", ":Neotree reveal left<CR>", { desc = "Neo-tree: reveal current file" })
     end,
