@@ -15,10 +15,9 @@ function Use-TempDir {
 $fontSourceFolder = "HackGenNerd_$Version"
 $fonts = (New-Object -ComObject Shell.Application).Namespace(0x14)
 Use-TempDir {
-    curl -OL "https://github.com/yuru7/HackGen/releases/download/$Version/HackGenNerd_$Version.zip"
+    curl -OL "https://github.com/yuru7/HackGen/releases/download/$Version/HackGen_NF_$Version.zip"
     Expand-Archive -Path "HackGenNerd_$Version.zip" -DestinationPath ".\"
     foreach($file in Get-ChildItem $fontSourceFolder -Include '*.ttf' -recurse ) {
-        
         $fileName = $file.Name
         if (-not(Test-Path -Path "C:\Windows\fonts\$fileName" )) {
             Get-ChildItem $file | %{ $fonts.CopyHere($_.fullname) }

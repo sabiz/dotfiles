@@ -6,7 +6,7 @@ $MY_PATH = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SCRIPT_PATH = Join-Path $MY_PATH "scripts"
 $ESC = [char]27
 $TITLE_COLOR_ESCAPE="$ESC[48;2;52;148;230m$ESC[38;2;255;255;255m"
-$HACKGEN_VER="v2.5.3"
+$HACKGEN_VER="v2.10.0"
 
 ##########################################
 
