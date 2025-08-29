@@ -1,7 +1,7 @@
 ###########################################
 ###########################################
 
-$INSTALLER_VERSION='v0.1.0'
+$INSTALLER_VERSION='v0.2.0'
 $MY_PATH = Split-Path -Parent $MyInvocation.MyCommand.Path
 $SCRIPT_PATH = Join-Path $MY_PATH "scripts"
 $ESC = [char]27
@@ -25,20 +25,88 @@ Write-Host "$ESC[38;2;219;113;178m  ██║██║ ╚████║██�
 Write-Host "$ESC[38;2;236;110;173m  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝   $ESC[4;213m$INSTALLER_VERSION"
 Write-Host "$ESC[m"
 
+# ------------------------------------------------------
+# Show Install title
+# ------------------------------------------------------
+function Show-Install-Title {
+    param(
+        [string]$title,
+        [bool]$isInteractive = $true
+    )
+    if ($isInteractive) {
+        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   $title ?    $ESC[m"
+        return $?
+    } else {
+        Write-Host "$TITLE_COLOR_ESCAPE   $title.    $ESC[m"
+        return $true
+    }
+}
+
+# ------------------------------------------------------
+# Confirm and Install (file or directory)
+# ------------------------------------------------------
+function Confirm-And-Install {
+    param(
+        [string]$title,
+        [string]$srcPath,
+        [string]$destPath,
+        [bool]$isDirectory = $false,
+        [bool]$isInteractive = $true
+    )
+    $shouldInstall = $true
+    if ($isInteractive) {
+        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   $title ?    $ESC[m"
+        $shouldInstall = $?
+    } else {
+        Write-Host "$TITLE_COLOR_ESCAPE   $title.    $ESC[m"
+    }
+    if ($shouldInstall) {
+        if ($isDirectory) {
+            if (Test-Path $destPath) {
+                Write-Host "\n$TITLE_COLOR_ESCAPE   $title directory already exists at $destPath. Showing diffs for files...    $ESC[m"
+                $srcFiles = Get-ChildItem -Path $srcPath -Recurse -File
+                foreach ($srcFile in $srcFiles) {
+                    $relativePath = $srcFile.FullName.Substring($srcPath.Length)
+                    $destFile = "$destPath$relativePath"
+                    if (Test-Path $destFile) {
+                        if (Get-Command nvim -ErrorAction SilentlyContinue) {
+                            nvim -d $destFile $srcFile.FullName
+                        } elseif (Get-Command vim -ErrorAction SilentlyContinue) {
+                            vim -d $destFile $srcFile.FullName
+                        } else {
+                            Write-Host "Neither nvim nor vim is installed. Cannot show diff for $destFile."
+                        }
+                    }
+                }
+            } else {
+                Copy-Item -Path $srcPath -Recurse -Force -Destination $destPath
+            }
+        } else {
+            if (Test-Path $destPath) {
+                Write-Host "$TITLE_COLOR_ESCAPE   $title already exists at $destPath. Showing diff...    $ESC[m"
+                if (Get-Command nvim -ErrorAction SilentlyContinue) {
+                    nvim -d $destPath $srcPath
+                } elseif (Get-Command vim -ErrorAction SilentlyContinue) {
+                    vim -d $destPath $srcPath
+                } else {
+                    Write-Host "Neither nvim nor vim is installed. Cannot show diff."
+                }
+            } else {
+                Copy-Item -Path $srcPath -Destination $destPath
+            }
+        }
+    }
+}
 
 # ------------------------------------------------------
 # Install Fonts
 # ------------------------------------------------------
 function Install-Fonts {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install fonts ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install fonts.    $ESC[m"
+    if (-not (Show-Install-Title "Install fonts" $isInstaractive)) {
+        return
     }
-    if ($? -or -not $isInstaractive) {
-        . "$SCRIPT_PATH\install_font.ps1" $HACKGEN_VER
-    }
+    . "$SCRIPT_PATH\install_font.ps1" $HACKGEN_VER
 }
 
 # ------------------------------------------------------
@@ -46,21 +114,17 @@ function Install-Fonts {
 # ------------------------------------------------------
 function Install-Development-Tools {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install development tools ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install development tools.    $ESC[m"
+    if (-not (Show-Install-Title "Install development tools" $isInstaractive)) {
+        return
     }
-    if ($? -or -not $isInstaractive) {
-        winget install vim.vim
-        winget install Git.Git
-        winget install Microsoft.VisualStudioCode.Insiders
-        winget install BurntSushi.ripgrep.MSVC
-        winget install zig.zig
-        winget install Neovim.Neovim
-        winget install Neovide.Neovide
+    winget install vim.vim
+    winget install Git.Git
+    winget install Microsoft.VisualStudioCode.Insiders
+    winget install BurntSushi.ripgrep.MSVC
+    winget install zig.zig
+    winget install Neovim.Neovim
+    winget install Neovide.Neovide
 
-    }
 }
 
 # ------------------------------------------------------
@@ -68,17 +132,21 @@ function Install-Development-Tools {
 # ------------------------------------------------------
 function Install-PowerShell-Profile {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install PowerShell Profile ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install PowerShell Profile.    $ESC[m"
-    }
-    if ($? -or -not $isInstaractive) {
-        $profilePath = Join-Path $MY_PATH 'Microsoft.PowerShell_profile.ps1'
-        Copy-Item -Path $profilePath -Destination $PROFILE
-        $configPath = Join-Path $MY_PATH '.config'
-        Copy-Item -Path $configPath -Recurse -Force -Destination "$env:USERPROFILE"
-    }
+    $profilePath = Join-Path $MY_PATH 'Microsoft.PowerShell_profile.ps1'
+    Confirm-And-Install `
+        -title "Install PowerShell Profile" `
+        -srcPath $profilePath `
+        -destPath $PROFILE `
+        -isDirectory $false `
+        -isInteractive $isInstaractive
+
+    $configPath = Join-Path $MY_PATH '.config'
+    Confirm-And-Install `
+        -title "Install .config directory" `
+        -srcPath $configPath `
+        -destPath "$env:USERPROFILE\.config" `
+        -isDirectory $true `
+        -isInteractive $isInstaractive
 }
 
 # ------------------------------------------------------
@@ -86,15 +154,14 @@ function Install-PowerShell-Profile {
 # ------------------------------------------------------
 function Install-Windows-Terminal-Settings {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install Windows Terminal Settings ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install Windows Terminal Settings.    $ESC[m"
-    }
-    if ($? -or -not $isInstaractive) {
-        $settingPath = Join-Path $MY_PATH 'windows_terminal_settings.json'
-        Copy-Item -Path $settingPath -Destination "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-    }
+    $settingPath = Join-Path $MY_PATH 'windows_terminal_settings.json'
+    $terminalDest = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+    Confirm-And-Install `
+        -title "Install Windows Terminal Settings" `
+        -srcPath $settingPath `
+        -destPath $terminalDest `
+        -isDirectory $false `
+        -isInteractive $isInstaractive
 }
 
 # ------------------------------------------------------
@@ -102,19 +169,29 @@ function Install-Windows-Terminal-Settings {
 # ------------------------------------------------------
 function Install-Vimrc {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install vimrc ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install vimrc.    $ESC[m"
-    }
-    if ($? -or -not $isInstaractive) {
-        $vimrcPath = Join-Path $MY_PATH '.vimrc'
-            Copy-Item -Path $vimrcPath -Destination "$env:USERPROFILE\.vimrc"
-            $vimPath = Join-Path $MY_PATH '.vim'
-            Copy-Item $vimPath -Recurse "$env:USERPROFILE\vimfiles"
-            $gvimrcPath = Join-Path $MY_PATH '_gvimrc'
-            Copy-Item -Path $gvimrcPath -Destination "$env:USERPROFILE\_gvimrc"
-    }
+    $vimrcPath = Join-Path $MY_PATH '.vimrc'
+    Confirm-And-Install `
+        -title "Install .vimrc" `
+        -srcPath $vimrcPath `
+        -destPath "$env:USERPROFILE\.vimrc" `
+        -isDirectory $false `
+        -isInteractive $isInstaractive
+
+    $vimPath = Join-Path $MY_PATH '.vim'
+    Confirm-And-Install `
+        -title "Install vimfiles directory" `
+        -srcPath $vimPath `
+        -destPath "$env:USERPROFILE\vimfiles" `
+        -isDirectory $true `
+        -isInteractive $isInstaractive
+
+    $gvimrcPath = Join-Path $MY_PATH '_gvimrc'
+    Confirm-And-Install `
+        -title "Install _gvimrc" `
+        -srcPath $gvimrcPath `
+        -destPath "$env:USERPROFILE\_gvimrc" `
+        -isDirectory $false `
+        -isInteractive $isInstaractive
 }
 
 # ------------------------------------------------------
@@ -122,21 +199,14 @@ function Install-Vimrc {
 # ------------------------------------------------------
 function Install-Neovim-Settings {
     param($isInstaractive = $true)
-    if ($isInstaractive) {
-        . "$SCRIPT_PATH\interactive.ps1" "$TITLE_COLOR_ESCAPE   Install Neovim settings ?    $ESC[m"
-    } else {
-        Write-Host "$TITLE_COLOR_ESCAPE   Install Neovim settings.    $ESC[m"
-    }
-    if ($? -or -not $isInstaractive) {
-        $nvimSource = Join-Path $MY_PATH 'nvim'
-        $nvimDest = "$env:USERPROFILE\AppData\Local\nvim"
-        if (Test-Path $nvimDest) {
-            $backupPath = "$nvimDest.backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
-            Write-Host "$TITLE_COLOR_ESCAPE   Existing nvim folder detected. Backing up to $backupPath    $ESC[m"
-            Rename-Item -Path $nvimDest -NewName $backupPath
-        }
-        Copy-Item -Path $nvimSource -Recurse -Force -Destination $nvimDest
-    }
+    $nvimSource = Join-Path $MY_PATH 'nvim'
+    $nvimDest = "$env:USERPROFILE\AppData\Local\nvim"
+    Confirm-And-Install `
+        -title "Install Neovim settings" `
+        -srcPath $nvimSource `
+        -destPath $nvimDest `
+        -isDirectory $true `
+        -isInteractive $isInstaractive
 }
 
 
@@ -152,10 +222,10 @@ if ($args.Count -eq 0) {
         switch ($arg) {
             'fonts' { Install-Fonts $false }
             'devtools' { Install-Development-Tools $false }
-            'profile' { Install-PowerShell-Profile $false }
-            'terminal' { Install-Windows-Terminal-Settings $false }
-            'vimrc' { Install-Vimrc $false }
-            'nvim' { Install-Neovim-Settings $false }
+            'profile' { Install-PowerShell-Profile }
+            'terminal' { Install-Windows-Terminal-Settings }
+            'vimrc' { Install-Vimrc }
+            'nvim' { Install-Neovim-Settings }
             default { Write-Host "Unknown argument: $arg"
                       Write-Host "Usage: install.ps1 {options...}"
                       Write-Host "Available options: fonts, devtools, profile, terminal, vimrc, nvim" }
