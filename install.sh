@@ -129,6 +129,9 @@ function installUtil () {
     mv git-prompt.sh ~/.util/.
     chmod a+x ~/.util/git-prompt.sh
 
+    echo -e "${TITLE_COLOR_ESCAPE} Install Lazygit ${ESC}[m"
+    curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
+
     if [ $OS = 'Mac' ];then
         echo -e "${TITLE_COLOR_ESCAPE} Install zsh-completions ${ESC}[m"
         [[ ! -e ~/.util/zsh-completions ]] && git clone https://github.com/zsh-users/zsh-completions.git ~/.util/zsh-completions
