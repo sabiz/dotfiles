@@ -1,24 +1,3 @@
--- Auto-load all Lua files in the same directory as this file -----------------
-local current_file = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":p")
-local current_file_real = vim.loop.fs_realpath(current_file)
-local dir = vim.fn.fnamemodify(current_file, ":h")
-
-
-for _, file in ipairs(vim.fn.globpath(dir, "*.lua", false, true)) do
-  local file_real = vim.loop.fs_realpath(file)
-  if file_real and file_real ~= current_file_real then
-    print("Loading " .. file, current_file)
-    local basename = vim.fn.fnamemodify(file, ":t:r")
-    local require_path = "lsp." .. basename
-    local ok, err = pcall(require, require_path)
-    if not ok then
-      vim.notify("Failed to load " .. require_path .. ": " .. err, vim.log.levels.ERROR)
-    end
-  end
-end
-
--------------------------------------------------------------------------------
-
 vim.diagnostic.config({
   virtual_text = {
     prefix = "●",
