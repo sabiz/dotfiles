@@ -162,6 +162,15 @@ function Install-PowerShell-Profile {
         -destPath $notificationDest `
         -isDirectory $false `
         -isInteractive $isInstaractive
+
+    $notifyCodexScript = Join-Path $SCRIPT_PATH 'Notify-CodexCompletion.ps1'
+    $notifyCodexDest = Join-Path $notificationDestDirectory 'Notify-CodexCompletion.ps1'
+    Confirm-And-Install `
+        -title "Install Notify-CodexCompletion script" `
+        -srcPath $notifyCodexScript `
+        -destPath $notifyCodexDest `
+        -isDirectory $false `
+        -isInteractive $isInstaractive
 }
 
 # ------------------------------------------------------
