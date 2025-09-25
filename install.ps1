@@ -92,6 +92,11 @@ function Confirm-And-Install {
                     Write-Host "Neither nvim nor vim is installed. Cannot show diff."
                 }
             } else {
+                $destDirectory = Split-Path -Parent $destPath
+                if ($destDirectory -and -not (Test-Path $destDirectory)) {
+                    # Ensure destination directory exists before copying a file
+                    New-Item -ItemType Directory -Path $destDirectory -Force | Out-Null
+                }
                 Copy-Item -Path $srcPath -Destination $destPath
             }
         }
@@ -146,6 +151,16 @@ function Install-PowerShell-Profile {
         -srcPath $configPath `
         -destPath "$env:USERPROFILE\.config" `
         -isDirectory $true `
+        -isInteractive $isInstaractive
+
+    $notificationScript = Join-Path $SCRIPT_PATH 'Show-Notification.ps1'
+    $notificationDestDirectory = Join-Path $env:USERPROFILE 'bin'
+    $notificationDest = Join-Path $notificationDestDirectory 'Show-Notification.ps1'
+    Confirm-And-Install `
+        -title "Install Show-Notification script" `
+        -srcPath $notificationScript `
+        -destPath $notificationDest `
+        -isDirectory $false `
         -isInteractive $isInstaractive
 }
 
