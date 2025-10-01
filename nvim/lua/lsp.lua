@@ -47,6 +47,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
         async = true,
       })
     end, { buffer = bufnr, desc = "LSP Format" })
+    vim.keymap.set("n", "<Leader>la", function()
+      vim.lsp.buf.code_action()
+    end, { buffer = bufnr, desc = "LSP Code Action" })
+    vim.keymap.set("n", "<Leader>lr", function()
+      vim.lsp.buf.rename()
+    end, { buffer = bufnr, desc = "LSP Rename" })
+    vim.keymap.set("n", "<Leader>ld", function()
+      vim.diagnostic.open_float()
+    end, { buffer = bufnr, desc = "LSP Line Diagnostics" })
 
     local last_pos -- {line, col}
     local last_float_win
