@@ -54,6 +54,10 @@ function installPreRequirements () {
             type "$req" > /dev/null 2>&1 || sudo apt install "$req"
             echo "$req"
         done
+    elif [ $OS = 'Mac' ];then
+        if ! type brew > /dev/null 2>&1; then
+            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
     fi
     echo "${TITLE_COLOR_ESCAPE} pre requirements install done. ${ESC}[m"
 
@@ -71,20 +75,33 @@ function installFonts () {
     echo "${TITLE_COLOR_ESCAPE} font install done. ${ESC}[m"
 }
 
-function installExa () {
+function installEza () {
     if [ $1 -ne $SKIP_AKS ];then
-        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install exa?    ${ESC}[m"
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install eza?    ${ESC}[m"
         answer=$?
         if [ $answer -ne 0 ];then
             return 0
         fi
     fi
     if [[ $OS == Linux* ]];then
-        sudo apt install exa
+        if ! type gpg > /dev/null 2>&1; then
+            sudo apt update
+            sudo apt install -y gpg
+        fi
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | sudo gpg --dearmor -o /etc/apt/keyrings/gierens.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main" | sudo tee /etc/apt/sources.list.d/gierens.list > /dev/null
+        sudo chmod 644 /etc/apt/keyrings/gierens.gpg /etc/apt/sources.list.d/gierens.list
+        sudo apt update
+        sudo apt install -y eza
     elif [ $OS = 'Mac' ];then
-        echo "You need install exa (https://the.exa.website/)"
+        if type brew > /dev/null 2>&1; then
+            brew install eza
+        else
+            echo "Homebrew not found. Run --pre-requirements first."
+        fi
     fi
-    echo "${TITLE_COLOR_ESCAPE} exa install done. ${ESC}[m"
+    echo "${TITLE_COLOR_ESCAPE} eza install done. ${ESC}[m"
 }
 
 function installVim () {
@@ -107,6 +124,35 @@ function installVim () {
     cd -
     rm -rf ~/vim-tmp
     echo "${TITLE_COLOR_ESCAPE} vim install done. ${ESC}[m"
+}
+
+function installNeovim () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install neovim/neovide?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
+    if [[ $OS == Linux* ]];then
+        sudo apt update
+        sudo apt install -y neovim
+        if ! sudo apt install -y neovide; then
+            if type snap > /dev/null 2>&1; then
+                sudo snap install neovide
+            else
+                echo "neovide install failed on apt and snap is not available."
+            fi
+        fi
+    elif [ $OS = 'Mac' ];then
+        if type brew > /dev/null 2>&1; then
+            brew install neovim
+            brew install --cask neovide
+        else
+            echo "Homebrew not found. Run --pre-requirements first."
+        fi
+    fi
+    echo "${TITLE_COLOR_ESCAPE} neovim/neovide install done. ${ESC}[m"
 }
 
 function installUtil () {
@@ -172,15 +218,31 @@ function installBashrc () {
             return 0
         fi
     fi
+    curl -sS https://starship.rs/install.sh | sh
+    mkdir -p ~/.config
+    cp $(dirname $0)/starship.toml ~/.config/starship.toml
     if [ $OS = 'Mac' ];then
         cp $(dirname $0)/.zshrc ~/.zshrc
     else
-        curl -sS https://starship.rs/install.sh | sh
-        mkdir -p ~/.config
-        cp $(dirname $0)/starship.toml ~/.config/starship.toml
         cp $(dirname $0)/.bashrc ~/.bashrc
     fi
     echo "${TITLE_COLOR_ESCAPE} bashrc/zshrc install done. ${ESC}[m"
+}
+
+function installShellEnvironment () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install shell environment?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
+    installEza $SKIP_AKS
+    installUtil $SKIP_AKS
+    installFzf $SKIP_AKS
+    installEnhancd $SKIP_AKS
+    installBashrc $SKIP_AKS
+    echo "${TITLE_COLOR_ESCAPE} shell environment install done. ${ESC}[m"
 }
 
 function installVimrc () {
@@ -194,6 +256,19 @@ function installVimrc () {
     cp $(dirname $0)/.vimrc ~/.vimrc
     cp -R $(dirname $0)/.vim ~/.vim
     echo "${TITLE_COLOR_ESCAPE} vimrc install done. ${ESC}[m"
+}
+
+function installNvimSettings () {
+    if [ $1 -ne $SKIP_AKS ];then
+        ${SCRIPT_PATH}$INTERACTIVE_SH "${TITLE_COLOR_ESCAPE}   Install nvim settings?    ${ESC}[m"
+        answer=$?
+        if [ $answer -ne 0 ];then
+            return 0
+        fi
+    fi
+    mkdir -p ~/.config
+    cp -R $(dirname $0)/nvim ~/.config/
+    echo "${TITLE_COLOR_ESCAPE} nvim settings install done. ${ESC}[m"
 }
 
 function installGitConfig () {
@@ -211,13 +286,11 @@ function installGitConfig () {
 if [ $# -eq 0 ];then
     installPreRequirements 0
     installFonts 0
-    installExa 0
+    installShellEnvironment 0
     installVim 0
-    installUtil 0
-    installFzf 0
-    installEnhancd 0
-    installBashrc 0
+    installNeovim 0
     installVimrc 0
+    installNvimSettings 0
     installGitConfig 0
 else
     for arg in "$@"; do
@@ -229,10 +302,19 @@ else
                 installFonts $SKIP_AKS
                 ;;
             --exa)
-                installExa $SKIP_AKS
+                installEza $SKIP_AKS
+                ;;
+            --eza)
+                installEza $SKIP_AKS
                 ;;
             --vim)
                 installVim $SKIP_AKS
+                ;;
+            --neovim)
+                installNeovim $SKIP_AKS
+                ;;
+            --shell-environment)
+                installShellEnvironment $SKIP_AKS
                 ;;
             --util)
                 installUtil $SKIP_AKS
@@ -249,16 +331,19 @@ else
             --vimrc)
                 installVimrc $SKIP_AKS
                 ;;
+            --nvim)
+                installNvimSettings $SKIP_AKS
+                ;;
             --gitconfig)
                 installGitConfig $SKIP_AKS
                 ;;
             --help)
-                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa] [--vim] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--gitconfig]"
+                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa|--eza] [--vim] [--neovim] [--shell-environment] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--nvim] [--gitconfig]"
                 exit 0
                 ;;
             *)
                 echo "Unknown option: $arg"
-                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa] [--vim] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--gitconfig]"
+                echo -e "Usage: $0 [--pre-requirements] [--fonts] [--exa|--eza] [--vim] [--neovim] [--shell-environment] [--util] [--fzf] [--enhancd] [--bashrc] [--vimrc] [--nvim] [--gitconfig]"
                 exit 1
                 ;;
         esac

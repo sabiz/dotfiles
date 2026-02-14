@@ -11,9 +11,9 @@ export HISTFILESIZE=20000
 export HISTSIZE=10000
 
 # Alias--------------------------------------------------
-alias ls='exa -Fg'
-alias ll='ls -AlFgh'
-alias la='ls -CFal'
+alias ls='eza -F'
+alias ll='ls -AlFh'
+alias la='ls -Fal'
 alias mv='mv -i'
 alias rm='rm -i'
 alias cp='cp -i'
@@ -80,4 +80,3 @@ cdAndLs(){
 }
 
 alias cd=cdAndLs
-
