@@ -15,6 +15,7 @@ format = """
 [ ](bg:#444575)\
 [》](bg:#484376)\
 [$directory](bg:#4C4177)\
+[$aws](bg:#4C4177)\
 [](fg:#4C4177)\
 $fill\
 [$git_branch](fg:#4C4177)\
@@ -34,7 +35,6 @@ format = '[$time]($style)'
 success_symbol = '[ ❯](bold fg:#00A550)'
 error_symbol = '[ ❯](bold fg:#B542B4)'
 format = '$symbol '
-
 
 [username]
 disabled = false
@@ -91,14 +91,17 @@ disabled = false
 disabled = false
 symbol = ' '
 
+[aws]
+disabled = false
+style = 'none'
+symbol = 'AWS'
+format= ' [$symbol](fg:#FF9900 bg:prev_bg bold)[ ($profile)(\($region\))(\[$duration\])]($style)'
+
 ################################################################
 # Disabled modules
 ################################################################
 
 [custom]
-disabled = true
-
-[aws]
 disabled = true
 
 [azure]
