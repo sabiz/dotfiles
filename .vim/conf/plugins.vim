@@ -5,7 +5,6 @@ let g:plugin_list = [
       \'ap/vim-buftabline.git',
       \'delphinus/vim-auto-cursorline',
       \'editorconfig/editorconfig-vim.git',
-      \'github/copilot.vim.git',
       \'itchyny/lightline.vim.git',
       \'mattn/vim-lsp-settings',
       \'mattn/vim-molder',

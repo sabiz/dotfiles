@@ -1,6 +1,6 @@
 return {
   "MeanderingProgrammer/render-markdown.nvim",
-  ft = { "markdown", "codecompanion" },
+  ft = { "markdown" },
   opts = {
     heading = {
       -- default '󰫎 ' can render as 3+ display cells on this environment,
