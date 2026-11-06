@@ -6,9 +6,3 @@ set guioptions=
 set guifont=HackGenNerd_Console:h12:cSHIFTJIS:qDRAFT
 set rop=type:directx,renmode:5
 set lazyredraw
-"""""""""""""""""""""""""""""""""""""
-" Load common config
-"""""""""""""""""""""""""""""""""""""
-if filereadable(expand('~/.vimrc'))
-  source ~/.vimrc
-endif

@@ -6,9 +6,12 @@ vim.keymap.set("n", "<Leader><Right>", ":bnext<CR>", {noremap = true, silent = t
 vim.keymap.set("n", "<Leader><Left>", ":bprevious<CR>", {noremap = true, silent = true, desc="Previous buffer"})
 vim.keymap.set("n", "<Leader><Down>", ":bdelete<CR>", {noremap = true, silent = true, desc="Close buffer"})
 
+vim.keymap.set("n", "<Leader>c", "gcc", { remap = true, desc = "Toggle line comment" })
+vim.keymap.set("x", "<Leader>c", "gc", { remap = true, desc = "Toggle selection comment" })
+
 local function open_terminal()
   local shell_cmd
-  local os_name = vim.loop.os_uname().sysname
+  local os_name = vim.uv.os_uname().sysname
 
   if os_name == "Windows_NT" then
     shell_cmd = "pwsh"
@@ -26,7 +29,7 @@ local function open_terminal()
 
 end
 vim.keymap.set("n", "<leader>sh", open_terminal, {noremap = true, silent = true, desc="Open terminal"})
-vim.keymap.set("t", "<Esc>", [[<C-\><C-n>]], {noremap = true, silent = true, desc="Terminal: Escape to normal mode"})
+vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], {noremap = true, silent = true, desc="Terminal: Escape to normal mode"})
 vim.keymap.set("t", "<C-Left>", [[<C-\><C-n><C-w>h]], {noremap = true, silent = true, desc="Move to left window"})
 vim.keymap.set("t", "<C-Down>", [[<C-\><C-n><C-w>j]], {noremap = true, silent = true, desc="Move to lower window"})
 vim.keymap.set("t", "<C-Up>", [[<C-\><C-n><C-w>k]], {noremap = true, silent = true, desc="Move to upper window"})

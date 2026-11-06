@@ -6,7 +6,7 @@ return {
             desc = "Quickhl: highlight this word",
         })
 
-        vim.keymap.set({ "n", "x" }, "<Space>M", "<Plug>(quickhl-manual-reset)", {
+        vim.keymap.set({ "n", "x" }, "<Leader>M", "<Plug>(quickhl-manual-reset)", {
             remap = true,
             desc = "Quickhl: reset manual highlights",
         })

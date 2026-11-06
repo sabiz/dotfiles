@@ -14,9 +14,6 @@ return {
                 { name = "buffer" },
                 { name = "nvim_lsp" },
                 { name = "path" },
-                per_filetype = {
-                    codecompanion = { "codecompanion" },
-                }
             }),
             window = {
                 completion = cmp.config.window.bordered(),

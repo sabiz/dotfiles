@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 let g:plugin_list = [
-      \'Townk/vim-autoclose.git',
       \'airblade/vim-gitgutter.git',
       \'ap/vim-buftabline.git',
       \'delphinus/vim-auto-cursorline',

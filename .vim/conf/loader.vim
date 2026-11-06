@@ -5,200 +5,113 @@ if !executable('git')
   finish
 endif
 
-let s:update_plugin = 0
 let s:plugin_path = expand(g:vim_home_runtime_path.'/pack/plugin/start/')
-let s:vim_home_runtime_conf_plugin_path = expand(g:vim_home_runtime_conf_path.'/plugin')
-let s:plugin_names = map(deepcopy(g:plugin_list), {idx, repo-> matchstr(repo, '.\+\/\zs\(\w\|-\)\+\ze')})
+let s:conf_path = expand(g:vim_home_runtime_conf_path.'/plugin')
+let s:plugins = map(deepcopy(g:plugin_list), {_, repo -> #{
+      \ repo: repo,
+      \ name: matchstr(repo, '.\+\/\zs\(\w\|-\)\+\ze'),
+      \ }})
+let s:plugin_names = map(deepcopy(s:plugins), {_, p -> p.name})
 
-function! s:deleteUnUsedPlugin()
-  let dirList = split(glob(s:plugin_path.'*'), '\n')
-  for d in dirList
-    if match(s:plugin_names, fnamemodify(d, ':t')) == -1
-      call delete(expand(d), 'rf')
-      call echoraw("\x1b[94mDelete:\t\x1b[0m".fnamemodify(d, ':t'))
-    endif
-  endfor
-endfunction
+let s:pending_messages = []
 
-function! s:installAndUpdatePlugin() abort
-  let job_list = []
-  let idx = 0
-  for k in s:plugin_names
-    let clonePath = s:plugin_path . k
-    if !isdirectory(clonePath)
-      let cmd = 'git ' . 'clone https://github.com/' . g:plugin_list[idx] . ' ' . clonePath
-      call echoraw("\x1b[33mNew:\x1b[0m\t".k."\n")
-    elseif s:update_plugin
-      let cmd = 'git --git-dir='.clonePath.'/.git pull origin'
-      call echoraw("\x1b[33mUpdate:\x1b[0m\t".k."\n")
-    else
-      let cmd = 'git'
-    endif
-    let job = job_start(cmd, #{in_io: 'null', out_io: 'null', err_io: 'null'})
-    call add(job_list, #{name: k, job: job, pos:idx})
-    let idx += 1
-  endfor
-  call echoraw("\x1b[s") " Save cursor pos
-
-  " Wait jobs
-  while empty(job_list) == 0
-    function! s:checkJobStatus(idx, val)
-      let st = job_status(a:val.job)
-      if st == 'dead'
-        let info = job_info(a:val.job)
-        if info.cmd[0] == 'git' " ignore
-          return 0
-        endif
-        let exitval = info.exitval
-        call echoraw("\x1b[u\x1b[".a:val.pos."A") " Restore cursor pos & Move cursor
-        if exitval == 0
-          call echoraw("\x1b[34mSuccess:\x1b[0m\t".a:val.name."\n")
-        else
-          call echoraw("\x1b[31mFailed:\x1b[0m\t".a:val.name."\n")
-          echon " "
-        endif
-      endif
-      return st !=# 'dead'
-    endfunction
-    call filter(job_list, function("s:checkJobStatus"))
-  endwhile
-
-endfunction
-
-function! s:loadPlugin()
-  for k in s:plugin_names
-    let pluginPath = expand(s:plugin_path.'/'.k)
-    if !isdirectory(pluginPath)
-      continue
-    endif
-
-    " Load plugin help
-    let docPath = pluginPath.'/doc'
-    if isdirectory(docPath)
-      execute('autocmd vimenter * helptags '.expand(docPath))
-    endif
-
-    " Load plugin config
-    let confFilePath = s:vim_home_runtime_conf_plugin_path.'/'.k.'.vim'
-    if filereadable(confFilePath)
-      execute('source '.confFilePath)
-    endif
-  endfor
-endfunction
-
-function! s:loadImpl() abort
-  call s:deleteUnUsedPlugin()
-
-  call s:installAndUpdatePlugin()
-
-  call s:loadPlugin()
-endfunction
-
-def! DeleteUnUsedPlugin()
-  var dirList = split(glob(s:plugin_path .. "*"), "\n")
-  for d in dirList
-   if match(s:plugin_names, fnamemodify(d, ":t")) == -1
-     delete(expand(d), "rf")
-     echoraw("\x1b[94mDelete: " .. fnamemodify(d, ':t') .. "\x1b[0m")
-     echoraw("\n")
-   endif
-  endfor
-enddef
-
-def! InstallAndUpdatePlugin()
-  var job_list = []
-  var idx = 0
-  for k in s:plugin_names
-    var clonePath = s:plugin_path .. k
-    var cmd = ''
-    if !isdirectory(clonePath)
-      cmd = 'git ' .. 'clone https://github.com/' .. g:plugin_list[idx] .. ' ' .. clonePath
-      echoraw("\x1b[33mNew: " .. k .. "\x1b[0m")
-      echoraw("\n")
-      sleep 200m
-    elseif s:update_plugin
-      cmd = 'git --git-dir=' .. clonePath .. '/.git pull origin'
-      echoraw("\x1b[33mUpdate: " .. k ..  "\x1b[0m")
-      echoraw("\n")
-      sleep 200m
-    else
-      cmd = 'git'
-    endif
-    var job = job_start(cmd, {'in_io': 'null', 'out_io': 'null', 'err_io': 'null'})
-    add(job_list, {'name': k, 'job': job, 'pos': idx})
-    idx += 1
-  endfor
-  echoraw("\x1b[s") # Save cursor pos
-
-  # Wait jobs
-  while empty(job_list) == 0
-    filter(job_list, (i, value) => {
-      var st = job_status(value.job)
-      if st == 'dead'
-        var info = job_info(value.job)
-        if info.cmd[0] == 'git' # ignore
-          return false
-        endif
-        var exitval = info.exitval
-        echoraw("\x1b[u\x1b[" .. value.pos .. "A") # Restore cursor pos & Move cursor
-        if exitval == 0
-          echoraw("\x1b[34mSuccess: " .. value.name .. "\x1b[0m")
-          echoraw("\n")
-        else
-          echoraw("\x1b[31mFailed: " .. value.name .. "\x1b[0m")
-          echoraw("\n")
-          echon " "
-        endif
-      endif
-      return st !=# 'dead'
-    })
-  endwhile
-enddef
-
-def! LoadPlugin()
-  for k in s:plugin_names
-    var pluginPath = expand(s:plugin_path .. '/' .. k)
-    if !isdirectory(pluginPath)
-      continue
-    endif
-
-    # Load plugin help
-    var docPath = pluginPath .. '/doc'
-    if isdirectory(docPath)
-      execute('autocmd vimenter * helptags ' .. expand(docPath))
-    endif
-
-    # Load plugin config
-    var confFilePath = s:vim_home_runtime_conf_plugin_path .. '/' .. k .. '.vim'
-    if filereadable(confFilePath)
-      execute('source ' .. confFilePath)
-    endif
-  endfor
-enddef
-
-def! LoadImpl()
-
-  g:DeleteUnUsedPlugin()
-
-  g:InstallAndUpdatePlugin()
-
-  g:LoadPlugin()
-
-enddef
-
-function! s:load() abort
-  if !isdirectory(s:plugin_path)
-    call mkdir(s:plugin_path, 'p')
-  endif
-
-  if v:version >= 900
-    call LoadImpl()
+function! s:report(message) abort
+  if v:vim_did_enter
+    echomsg a:message
   else
-    call s:loadImpl()
+    call add(s:pending_messages, a:message)
   endif
-
 endfunction
 
-call s:load()
+function! s:flushMessages() abort
+  if !empty(s:pending_messages)
+    echomsg join(s:pending_messages, ' / ')
+  endif
+  let s:pending_messages = []
+endfunction
+
+" Runs git jobs in parallel and reports the outcome on a single line.
+function! s:runJobs(label, requests) abort
+  let jobs = map(a:requests, {_, r -> #{
+        \ name: r.name,
+        \ job: job_start(r.cmd, #{in_io: 'null', out_io: 'null', err_io: 'null'}),
+        \ }})
+  let total = len(jobs)
+  let failed = []
+  while !empty(jobs)
+    sleep 50m
+    for item in filter(copy(jobs), {_, j -> job_status(j.job) !=# 'run'})
+      if job_info(item.job).exitval != 0
+        call add(failed, item.name)
+      endif
+    endfor
+    call filter(jobs, {_, j -> job_status(j.job) ==# 'run'})
+  endwhile
+  call s:report(a:label.': '.(total - len(failed)).'/'.total.' ok'
+        \ .(empty(failed) ? '' : ', failed: '.join(failed, ', ')))
+endfunction
+
+function! s:updateHelptags(names) abort
+  for name in a:names
+    let doc = s:plugin_path.name.'/doc'
+    if isdirectory(doc)
+      execute 'helptags' fnameescape(doc)
+    endif
+  endfor
+endfunction
+
+function! s:deleteUnusedPlugins() abort
+  for d in glob(s:plugin_path.'*', 1, 1)
+    let name = fnamemodify(d, ':t')
+    if index(s:plugin_names, name) == -1
+      call delete(d, 'rf')
+      call s:report('Deleted: '.name)
+    endif
+  endfor
+endfunction
+
+function! s:installMissingPlugins() abort
+  let missing = filter(deepcopy(s:plugins), {_, p -> !isdirectory(s:plugin_path.p.name)})
+  if empty(missing)
+    return
+  endif
+  call s:runJobs('Plugin install', map(deepcopy(missing), {_, p -> #{
+        \ name: p.name,
+        \ cmd: ['git', 'clone', 'https://github.com/'.p.repo, s:plugin_path.p.name],
+        \ }}))
+  call s:updateHelptags(map(missing, {_, p -> p.name}))
+endfunction
+
+function! s:updatePlugins() abort
+  let installed = filter(copy(s:plugin_names), {_, n -> isdirectory(s:plugin_path.n)})
+  call s:runJobs('Plugin update', map(copy(installed), {_, n -> #{
+        \ name: n,
+        \ cmd: ['git', '-C', s:plugin_path.n, 'pull', '--ff-only'],
+        \ }}))
+  call s:updateHelptags(installed)
+endfunction
+
+function! s:loadPluginConfigs() abort
+  for name in s:plugin_names
+    let conf = s:conf_path.'/'.name.'.vim'
+    if isdirectory(s:plugin_path.name) && filereadable(conf)
+      execute 'source' fnameescape(conf)
+    endif
+  endfor
+endfunction
+
+if !isdirectory(s:plugin_path)
+  call mkdir(s:plugin_path, 'p')
+endif
+call s:deleteUnusedPlugins()
+call s:installMissingPlugins()
+call s:loadPluginConfigs()
+
+augroup myPluginLoader
+  autocmd!
+  autocmd VimEnter * ++once call s:flushMessages()
+augroup END
+
+command! PluginUpdate call s:updatePlugins()
 
 " vim:ft=vim:fdm=marker:fmr={{{,}}}:ts=8:sw=2:sts=2:

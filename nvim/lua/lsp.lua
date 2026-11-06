@@ -16,112 +16,41 @@ vim.diagnostic.config({
   },
 })
 
-do
-  local orig = vim.lsp.handlers["textDocument/hover"]
-  vim.lsp.handlers["textDocument/hover"] = function(err, result, ctx, config)
-    config = config or {}
-    config.border = config.border or "rounded"
-    config.focusable = config.focusable or false
-    config.max_width = config.max_width or 80
-    config.max_height = config.max_height or 30
-    local bufnr, winid = orig(err, result, ctx, config)
-    if winid and vim.api.nvim_win_is_valid(winid) then
-      pcall(vim.api.nvim_set_option_value, "wrap", true,      { win = winid })
-      pcall(vim.api.nvim_set_option_value, "linebreak", true, { win = winid })
-      pcall(vim.api.nvim_set_option_value, "number", false,   { win = winid })
-      pcall(vim.api.nvim_set_option_value, "relativenumber", false, { win = winid })
-    end
-    return bufnr, winid
-  end
+vim.lsp.config("*", {
+  capabilities = require("cmp_nvim_lsp").default_capabilities(),
+})
+
+local function hover()
+  vim.lsp.buf.hover({ border = "rounded", max_width = 80, max_height = 30 })
 end
 
+local attach_group = vim.api.nvim_create_augroup("my_lsp_attach", { clear = true })
+local hold_group = vim.api.nvim_create_augroup("my_lsp_diagnostic_float", { clear = true })
+
 vim.api.nvim_create_autocmd("LspAttach", {
+  group = attach_group,
   callback = function(args)
     local bufnr = args.buf
-
-    vim.keymap.set("n", "<Leader>lh", function()
-      vim.lsp.buf.hover()
-    end, { buffer = bufnr, desc = "LSP Hover" })
-    vim.keymap.set({ "n", "v" }, "<Leader>lf", function()
-      vim.lsp.buf.format({
-        async = true,
-      })
-    end, { buffer = bufnr, desc = "LSP Format" })
-    vim.keymap.set("n", "<Leader>la", function()
-      vim.lsp.buf.code_action()
-    end, { buffer = bufnr, desc = "LSP Code Action" })
-    vim.keymap.set("n", "<Leader>lr", function()
-      vim.lsp.buf.rename()
-    end, { buffer = bufnr, desc = "LSP Rename" })
-    vim.keymap.set("n", "<Leader>ld", function()
-      vim.diagnostic.open_float()
-    end, { buffer = bufnr, desc = "LSP Line Diagnostics" })
-
-    local last_pos -- {line, col}
-    local last_float_win
-
-    local function close_float()
-      if last_float_win and vim.api.nvim_win_is_valid(last_float_win) then
-        pcall(vim.api.nvim_win_close, last_float_win, true)
-      end
-      last_float_win = nil
+    local function map(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
     end
 
-    local function open_diagnostic_float()
-      local mode = vim.api.nvim_get_mode().mode
-      if not mode:match("^[nvV%s]") then
-        return
-      end
+    map("n", "K", hover, "LSP Hover")
+    map("n", "<Leader>lh", hover, "LSP Hover")
+    map({ "n", "x" }, "<Leader>lf", function()
+      vim.lsp.buf.format({ async = true })
+    end, "LSP Format")
+    map("n", "<Leader>la", vim.lsp.buf.code_action, "LSP Code Action")
+    map("n", "<Leader>lr", vim.lsp.buf.rename, "LSP Rename")
+    map("n", "<Leader>ld", vim.diagnostic.open_float, "LSP Line Diagnostics")
 
-      local pos = vim.api.nvim_win_get_cursor(0)
-      if last_pos and last_pos[1] == pos[1] and last_pos[2] == pos[2] then
-        return
-      end
-      last_pos = { pos[1], pos[2] }
-
-      local line = pos[1] - 1
-      local diags = vim.diagnostic.get(bufnr, { lnum = line })
-      if not diags or #diags == 0 then
-        close_float()
-        return
-      end
-
-      close_float()
-      last_float_win = vim.diagnostic.open_float(bufnr, {
-        focus = false,
-        scope = "cursor",
-        border = "rounded",
-        source = "if_many",
-        max_width = 80,
-        max_height = 20,
-        severity_sort = true,
-      })
-
-      if last_float_win and vim.api.nvim_win_is_valid(last_float_win) then
-        pcall(vim.api.nvim_set_option_value, "wrap", true,      { win = last_float_win })
-        pcall(vim.api.nvim_set_option_value, "linebreak", true, { win = last_float_win })
-        pcall(vim.api.nvim_set_option_value, "number", false,   { win = last_float_win })
-        pcall(vim.api.nvim_set_option_value, "relativenumber", false, { win = last_float_win })
-      end
-    end
-
+    vim.api.nvim_clear_autocmds({ group = hold_group, buffer = bufnr })
     vim.api.nvim_create_autocmd("CursorHold", {
+      group = hold_group,
       buffer = bufnr,
       callback = function()
-        vim.schedule(open_diagnostic_float)
+        vim.diagnostic.open_float({ bufnr = bufnr, scope = "cursor", focus = false })
       end,
-    })
-
-    vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-      buffer = bufnr,
-      callback = function()
-        close_float()
-      end,
-    })
-
-    vim.api.nvim_create_autocmd({ "BufHidden", "BufLeave" }, {
-      buffer = bufnr,
-      callback = close_float,
     })
   end,
 })

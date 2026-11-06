@@ -18,7 +18,7 @@ return {
     config = function()
         require("lualine").setup({
             options = {
-                theme = "catppuccin",
+                theme = "catppuccin-nvim",
                 always_show_tabline = false,
                 component_separators = { left = "⎪", right = "⎪" },
                 section_separators = { left = "", right = "⁞▐ " },
